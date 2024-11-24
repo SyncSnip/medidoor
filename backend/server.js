@@ -1,8 +1,11 @@
-require("dotenv").config();
-const PORT = 3000;
+require('dotenv').config({ path: './.env' });
+const bodyParser = require("body-parser");
+const PORT = process.env.PORT || 3000;
 const express = require("express");
 const userRoutes = require("./routes/userRoutes.js");
 const app = express();
+
+app.use(bodyParser.json());
 
 app.use('/api/v1/user', userRoutes);
 
