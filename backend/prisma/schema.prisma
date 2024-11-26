@@ -21,3 +21,26 @@ model User {
   created_at DateTime @default(now())
   updated_at DateTime @default(now())
 }
+
+model Product {
+  productId   Int      @id @default(autoincrement())
+  name        String
+  price       Decimal  @db.Decimal(10, 2)
+  description String?
+  userId      Int
+  quantity    Int
+  reviews     Review[]
+  created_at  DateTime @default(now())
+  updated_at  DateTime @default(now())
+}
+
+model Review {
+  id        Int      @id @default(autoincrement())
+  content   String
+  rating    Int
+  userId    Int
+  productId Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  product   Product  @relation(fields: [productId], references: [productId])
+}

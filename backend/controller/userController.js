@@ -19,7 +19,9 @@ const createUser = asyncHandler(async (req, res) => {
       data: { name, password: hashedPassword, email },
     });
 
-    return res.status(201).json({ status: 201, message: "New User has been created successfully", data: newUser });
+    const token = jwt.sign({ id: newUser.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+    return res.status(201).json({ status: 201, message: "New User has been created successfully", token, data: newUser });
   } catch (err) {
     return res.json({ status: 500, data: "Internal server error", message: err.message });
   }
@@ -31,7 +33,7 @@ const signIn = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
 
     const user = await prisma.user.findUnique({
-      where: { email: email },
+      where: { email },
     });
 
     if (!user) {
@@ -46,7 +48,7 @@ const signIn = asyncHandler(async (req, res) => {
 
     const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-    return res.status(200).json({ status: 200, message: "Sign in successful", data: user, token });
+    return res.status(200).json({ status: 200, message: "Sign in successful", token, data: user });
   } catch (err) {
     return res.json({ status: 500, data: "Internal server error", message: err.message });
   }
