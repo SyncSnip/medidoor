@@ -4,4 +4,4 @@ const prisma = new PrismaClient({
   log: ["query"],
 });
 
-exports.module = prisma;
+module.exports = prisma;
