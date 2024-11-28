@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const PORT = process.env.PORT || 3000;
 const express = require("express");
 const userRoutes = require("./routes/userRoutes.js");
+const productRoutes = require("./routes/productRoutes.js");
 const app = express();
 
 app.use(bodyParser.json());
@@ -11,7 +12,7 @@ app.use('/api/v1/user', userRoutes);
 app.use('/api/v1/product', productRoutes);
 
 app.get('/', (req, res) => {
-  res.send("Welcome to the User API!");
+  return res.send("Welcome to the User API!");
 });
 
 app.listen(PORT, () => {
