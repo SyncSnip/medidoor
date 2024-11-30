@@ -2,6 +2,8 @@ const asyncHandler = require('express-async-handler');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const prisma = require('../database_connect.js');
+const sendEmail = require('../utility/send_mail.js');
+const { verifyEmailBody, verifyEmailSubject } = require('../config/messageConfig.js');
 
 const createUser = asyncHandler(async (req, res) => {
   try {
@@ -19,9 +21,20 @@ const createUser = asyncHandler(async (req, res) => {
       data: { name, password: hashedPassword, email },
     });
 
-    const token = jwt.sign({ id: newUser.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    // Remove the password field from the response
+    const { password: _, ...userWithoutPassword } = newUser;
 
-    return res.status(201).json({ status: 201, message: "New User has been created successfully", token, data: newUser });
+    const token = jwt.sign(
+      { id: newUser.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    const otp = Math.floor(100000 + Math.random() * 900000);
+    await sendEmail(email, verifyEmailSubject(), verifyEmailBody(otp, name));
+
+    return res.status(201).json({
+      status: 201,
+      message: "New User has been created successfully",
+      token,
+      data: userWithoutPassword
+    });
   } catch (err) {
     return res.json({ status: 500, data: "Internal server error", message: err.message });
   }
@@ -48,7 +61,10 @@ const signIn = asyncHandler(async (req, res) => {
 
     const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-    return res.status(200).json({ status: 200, message: "Sign in successful", token, data: user });
+    // Remove the password field from the response
+    const { password: _, ...userWithoutPassword } = user;
+
+    return res.status(200).json({ status: 200, message: "Sign in successful", token, data: userWithoutPassword });
   } catch (err) {
     return res.json({ status: 500, data: "Internal server error", message: err.message });
   }
