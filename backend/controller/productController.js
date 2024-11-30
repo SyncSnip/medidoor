@@ -1,7 +1,5 @@
 const asyncHandler = require('express-async-handler');
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
-const prisma = require('../database_connect.js');
+const prisma = require('../utility/database_connect.js');
 
 const getAllProducts = asyncHandler(async (req, res) => {
   try {

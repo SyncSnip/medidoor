@@ -1,7 +1,7 @@
 const asyncHandler = require('express-async-handler');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const prisma = require('../database_connect.js');
+const prisma = require('../utility/database_connect.js');
 const sendEmail = require('../utility/send_mail.js');
 const { verifyEmailBody, verifyEmailSubject } = require('../config/messageConfig.js');
 
@@ -17,17 +17,23 @@ const createUser = asyncHandler(async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, Number(process.env.PASS_SALT));
 
+    // generate otp
+    const otp = Math.floor(100000 + Math.random() * 900000);
+
+    await sendEmail(email, verifyEmailSubject(), verifyEmailBody(otp, name));
+    console.log("mail sent");
     const newUser = await prisma.user.create({
-      data: { name, password: hashedPassword, email },
+      data: { name, password: hashedPassword, email, otp: String(otp), isVerified: false },
     });
+    console.log("new id created");
+    console.log(newUser);
 
     // Remove the password field from the response
     const { password: _, ...userWithoutPassword } = newUser;
 
     const token = jwt.sign(
-      { id: newUser.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-    const otp = Math.floor(100000 + Math.random() * 900000);
-    await sendEmail(email, verifyEmailSubject(), verifyEmailBody(otp, name));
+      { id: newUser.id, email: newUser.email }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    console.log(`token: ${token}`);
 
     return res.status(201).json({
       status: 201,
@@ -36,10 +42,45 @@ const createUser = asyncHandler(async (req, res) => {
       data: userWithoutPassword
     });
   } catch (err) {
+    throw new Error(err);
     return res.json({ status: 500, data: "Internal server error", message: err.message });
+  } finally {
+    console.log("finally block executed");
   }
 });
 
+const verifyUser = asyncHandler(async (req, res) => {
+  try {
+    const { otp } = req.body;
+    const { email, id } = req.user;
+
+
+    const user = await prisma.user.findUnique({ where: { email, id } });
+
+    // console.log(`user: ${user.email} is here`);
+    if (!user) {
+      return res.status(404).json({ status: 404, message: "User not found" });
+    }
+
+    if (user.otp !== otp) {
+      return res.status(403).json({ status: 400, message: "Invalid OTP" });
+    }
+
+
+    console.log(Date.now());
+    const verifiedUser = prisma.user.update({
+      where: { email, id },
+      data: {
+        otp: "000000",
+        isVerified: true,
+        updated_at: Date.now()
+      },
+    })
+    return res.status(200).json({ status: 200, message: "User verified successfully", data: verifiedUser });
+  } catch (err) {
+    return res.json({ status: 500, data: "Internal server error", message: err.message });
+  }
+});
 
 const signIn = asyncHandler(async (req, res) => {
   try {
@@ -125,4 +166,5 @@ module.exports = {
   updateUser,
   deleteUser,
   signIn,
+  verifyUser,
 };

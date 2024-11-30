@@ -15,6 +15,7 @@ If you have any questions, feel free to reach out at  medidoor@outlook.com.
 Warm regards,
 Team MediDoor`;
 }
+
 const verifyEmailSubject = () => {
   return "Verify Your Registration - Your OTP is Here!";
 }

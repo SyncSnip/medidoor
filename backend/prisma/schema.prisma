@@ -18,6 +18,8 @@ model User {
   name       String?
   email      String   @unique
   password   String?  @db.VarChar(255)
+  isVerified Boolean  @default(false)
+  otp        String   @default("000000")
   created_at DateTime @default(now())
   updated_at DateTime @default(now())
 }
