@@ -1,4 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:user_app/config/assets/app_images.dart';
 
 class Homepage extends StatelessWidget {
   const Homepage({super.key});
@@ -41,10 +44,12 @@ class Homepage extends StatelessWidget {
                         ),
                       ],
                     ),
-                    const CircleAvatar(
+                    CircleAvatar(
                       radius: 20,
-                      backgroundImage: NetworkImage(
-                          'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=1000&auto=format&fit=crop'),
+                      backgroundImage: const Image(
+                        image: CachedNetworkImageProvider(
+                            'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=1000&auto=format&fit=crop'),
+                      ).image,
                     )
                   ],
                 ),
@@ -91,10 +96,11 @@ class Homepage extends StatelessWidget {
                       ),
                     ),
                     padding: const EdgeInsets.all(16),
-                    child: const Column(
+                    // ignore: prefer_const_constructors
+                    child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
+                      children: const [
                         Text(
                           'Order Medicines',
                           style: TextStyle(
@@ -116,7 +122,16 @@ class Homepage extends StatelessWidget {
                   ),
                 ),
 
-                const SizedBox(height: 24),
+                SizedBox(height: 24),
+
+                Container(
+                  height: 200,
+                  width: 200,
+                  // decoration: BoxDecoration(
+                  //     image: DecorationImage(
+                  //         image: )),
+                  child: SvgPicture.asset(AppImages.diabetes),
+                ),
 
                 // Quick Actions Grid
                 GridView.count(
@@ -296,7 +311,9 @@ class Homepage extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             title,
+            maxLines: 1,
             style: const TextStyle(
+              overflow: TextOverflow.ellipsis,
               fontWeight: FontWeight.bold,
               fontSize: 16,
             ),
@@ -327,7 +344,7 @@ class Homepage extends StatelessWidget {
               borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
               image: DecorationImage(
                 image: NetworkImage(
-                  'https://5.imimg.com/data5/SELLER/Default/2021/12/MI/CM/OC/3775979/multivitamin-tablets-500x500.jpg',
+                  'https://cdn01.pharmeasy.in/dam/products_otc/205923/maxirich-multivitamin-minerals-antioxidant-calcium-box-10-softgels-6.1-1726646410.jpg?dim=700x0&dpr=1&q=100',
                 ),
                 fit: BoxFit.cover,
               ),

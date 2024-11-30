@@ -1,4 +1,8 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:user_app/config/assets/app_images.dart';
+import 'package:user_app/data/model/navigation_bar_model.dart';
 import 'package:user_app/presentation/Profile/pages/profile_page.dart';
 import 'package:user_app/presentation/cart/pages/cart_page.dart';
 import 'package:user_app/presentation/categories_page/pages/categories_page.dart';
@@ -17,7 +21,7 @@ class _RedirectingPageState extends State<RedirectingPage> {
       label: 'Home',
       icon: Icons.home_outlined,
       selectedIcon: Icons.home,
-      page:  Homepage(),
+      page: const Homepage(),
     ),
     NavigationItem(
       label: 'Categories',
@@ -40,6 +44,12 @@ class _RedirectingPageState extends State<RedirectingPage> {
   ];
 
   int _selectedIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    log(AppImages.diabetes);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +80,7 @@ class _RedirectingPageState extends State<RedirectingPage> {
           ),
         ),
       ),
-      extendBody: true, // Important for floating effect
+      extendBody: true,
     );
   }
 
@@ -112,18 +122,4 @@ class _RedirectingPageState extends State<RedirectingPage> {
       ),
     );
   }
-}
-
-class NavigationItem {
-  final String label;
-  final IconData icon;
-  final IconData selectedIcon;
-  final Widget page;
-
-  NavigationItem({
-    required this.label,
-    required this.icon,
-    required this.selectedIcon,
-    required this.page,
-  });
 }
