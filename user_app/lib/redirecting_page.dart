@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:user_app/presentation/categories_page/categories_page.dart';
+import 'package:user_app/presentation/categories_page/pages/categories_page.dart';
 import 'package:user_app/presentation/homepage/homepage.dart';
 
 class RedirectingPage extends StatefulWidget {
