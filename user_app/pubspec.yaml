@@ -1,6 +1,6 @@
 name: user_app
 description: "A new Flutter project."
-publish_to: 'none'
+publish_to: "none"
 version: 0.1.0
 
 environment:
@@ -10,6 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_dotenv: ^5.2.1
+  flutter_svg: ^2.0.16
   google_fonts: ^6.2.1
   http: ^1.2.2
   package_info_plus: ^8.1.1
@@ -21,3 +22,5 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - lib/config/assets/images/

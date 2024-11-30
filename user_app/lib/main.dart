@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:user_app/config/theme/app_theme.dart';
 import 'package:user_app/redirecting_page.dart';
 
 void main() {
@@ -11,7 +12,10 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: RedirectingPage(),
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: ThemeMode.system, // Will follow system theme
+      home: const RedirectingPage(),
     );
   }
 }

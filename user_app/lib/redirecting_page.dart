@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:user_app/presentation/categories_page/categories_page.dart';
-import 'package:user_app/presentation/homepage/homepage.dart';
+import 'package:user_app/presentation/Profile/pages/profile_page.dart';
+import 'package:user_app/presentation/cart/pages/cart_page.dart';
+import 'package:user_app/presentation/categories_page/pages/categories_page.dart';
+import 'package:user_app/presentation/homepage/pages/homepage.dart';
 
 class RedirectingPage extends StatefulWidget {
   const RedirectingPage({super.key});
@@ -10,43 +12,118 @@ class RedirectingPage extends StatefulWidget {
 }
 
 class _RedirectingPageState extends State<RedirectingPage> {
-  final List<Widget> _pages = <Widget>[
-    const Homepage(),
-    const CategoriesPage(),
+  final List<NavigationItem> _navigationItems = [
+    NavigationItem(
+      label: 'Home',
+      icon: Icons.home_outlined,
+      selectedIcon: Icons.home,
+      page:  Homepage(),
+    ),
+    NavigationItem(
+      label: 'Categories',
+      icon: Icons.category_outlined,
+      selectedIcon: Icons.category,
+      page: const CategoriesPage(),
+    ),
+    NavigationItem(
+      label: 'Consultation',
+      icon: Icons.add_ic_call_outlined,
+      selectedIcon: Icons.add_ic_call_outlined,
+      page: const CartPage(),
+    ),
+    NavigationItem(
+      label: 'Profile',
+      icon: Icons.person_pin,
+      selectedIcon: Icons.person_pin,
+      page: const ProfilePage(),
+    ),
   ];
-  int _index = 0;
+
+  int _selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _pages[_index],
-      bottomNavigationBar: Container(
-        height: 60,
-        color: Colors.amber,
-        child: Row(
-          children: [
-            ListView.builder(
-              scrollDirection: Axis.horizontal,
-              shrinkWrap: true,
-              itemCount: _pages.length,
-              itemBuilder: (BuildContext context, int index) {
-                return InkWell(
-                  onTap: () {
-                    setState(() {
-                      _index = index;
-                    });
-                  },
-                  child: const Column(
-                    children: [
-                      Text('Homepage'),
-                    ],
-                  ),
-                );
-              },
+      body: _navigationItems[_selectedIndex].page,
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Container(
+          height: 55,
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.grey, width: 1.2),
+            color: const Color.fromARGB(255, 48, 226, 101),
+            borderRadius: BorderRadius.circular(45),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.2),
+                blurRadius: 10,
+                offset: const Offset(0, 5),
+              ),
+            ],
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: List.generate(
+              _navigationItems.length,
+              (index) => _buildNavigationItem(index),
             ),
+          ),
+        ),
+      ),
+      extendBody: true, // Important for floating effect
+    );
+  }
+
+  Widget _buildNavigationItem(int index) {
+    final item = _navigationItems[index];
+    final isSelected = index == _selectedIndex;
+
+    return InkWell(
+      onTap: () => setState(() => _selectedIndex = index),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+        // decoration: BoxDecoration(
+        //   color: isSelected
+        //       ? Theme.of(context).primaryColor.withOpacity(0.1)
+        //       : Colors.transparent,
+        //   borderRadius: BorderRadius.circular(50),
+        // ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              isSelected ? item.selectedIcon : item.icon,
+              color: isSelected ? Theme.of(context).primaryColor : Colors.grey,
+            ),
+            const SizedBox(height: 4),
+            if (index == _selectedIndex)
+              Text(
+                item.label,
+                style: TextStyle(
+                  fontSize: 12,
+                  color:
+                      isSelected ? Theme.of(context).primaryColor : Colors.grey,
+                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                ),
+              ),
           ],
         ),
       ),
     );
   }
+}
+
+class NavigationItem {
+  final String label;
+  final IconData icon;
+  final IconData selectedIcon;
+  final Widget page;
+
+  NavigationItem({
+    required this.label,
+    required this.icon,
+    required this.selectedIcon,
+    required this.page,
+  });
 }
