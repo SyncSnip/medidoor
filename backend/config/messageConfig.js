@@ -1,3 +1,13 @@
+const verifyEmailSubject = () => {
+  return "Verify Your Registration - Your OTP is Here!";
+}
+
+const forgetOtpSubject = () => {
+  return "Reset Your Password for Medidoor";
+}
+
+
+
 const verifyEmailBody = (otp, name) => {
   return `
 Hi ${name},
@@ -16,11 +26,27 @@ Warm regards,
 Team MediDoor`;
 }
 
-const verifyEmailSubject = () => {
-  return "Verify Your Registration - Your OTP is Here!";
-}
+const forgetOtpMailBody = (otp, name) => {
+  return `
+Dear ${name},
+
+We received a request to reset your password for your Medidoor account. Use the One-Time Password (OTP) below to proceed with resetting your password:
+
+Your OTP: ${otp}
+
+This OTP is valid for the next 15 minutes. Please do not share this code with anyone for security purposes.
+
+If you did not request a password reset, you can safely ignore this email. Rest assured, your account is secure.
+
+For further assistance, feel free to reach out to us at medidoor@outlook.com.
+
+Thank you,
+The Medidoor Team`;
+};
 
 module.exports = {
   verifyEmailBody,
   verifyEmailSubject,
+  forgetOtpSubject,
+  forgetOtpMailBody,
 };

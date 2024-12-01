@@ -1,9 +1,11 @@
+
 const asyncHandler = require('express-async-handler');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const prisma = require('../utility/database_connect.js');
 const sendEmail = require('../utility/send_mail.js');
-const { verifyEmailBody, verifyEmailSubject } = require('../config/messageConfig.js');
+const { verifyEmailBody, verifyEmailSubject, forgetOtpSubject, forgetOtpMailBody } = require('../config/messageConfig.js');
+const { otpGenerator } = require('../config/otp_generator.js');
 
 const createUser = asyncHandler(async (req, res) => {
   try {
@@ -13,8 +15,6 @@ const createUser = asyncHandler(async (req, res) => {
       where: { email },
     });
 
-    console.log(findUser);
-
     if (findUser) return res.json({ status: 400, message: "User  already exists" });
 
     const hashedPassword = await bcrypt.hash(password, Number(process.env.PASS_SALT));
@@ -23,19 +23,16 @@ const createUser = asyncHandler(async (req, res) => {
     const otp = Math.floor(100000 + Math.random() * 900000);
 
     await sendEmail(email, verifyEmailSubject(), verifyEmailBody(otp, name));
-    console.log("mail sent");
+
     const newUser = await prisma.user.create({
       data: { name, password: hashedPassword, email, otp: String(otp), isVerified: false },
     });
-    console.log("new id created");
-    console.log(newUser);
 
     // Remove the password field from the response
     const { password: _, ...userWithoutPassword } = newUser;
 
     const token = jwt.sign(
       { id: newUser.id, email: newUser.email }, process.env.JWT_SECRET, { expiresIn: '1h' });
-    console.log(`token: ${token}`);
 
     return res.status(201).json({
       status: 201,
@@ -44,7 +41,6 @@ const createUser = asyncHandler(async (req, res) => {
       data: userWithoutPassword,
     });
   } catch (err) {
-    throw new Error(err);
     return res.json({ status: 500, data: "Internal server error", message: err.message });
   } finally {
     console.log("finally block executed");
@@ -57,7 +53,10 @@ const verifyUser = asyncHandler(async (req, res) => {
     const user = req.user;
     const { email, id } = req.user;
 
-    console.log(`user: ${user.email} is here`);
+    if (user.isVerified) {
+      return res.json({ status: 401, message: "User is already verified" });
+    }
+
     if (!user) {
       return res.status(404).json({ status: 404, message: "User not found" });
     }
@@ -66,10 +65,7 @@ const verifyUser = asyncHandler(async (req, res) => {
       return res.status(403).json({ status: 400, message: "Invalid OTP" });
     }
 
-    // console.log(new Date());
-    // console.log(Date().toISOString());
     const currentDate = new Date();
-    console.log(currentDate);
     const verifiedUser = await prisma.user.update({
       where: { email },
       data: {
@@ -80,7 +76,7 @@ const verifyUser = asyncHandler(async (req, res) => {
     });
 
     const userCheck = await prisma.user.findUnique({ where: { email } });
-    console.log(userCheck.toString());
+
     return res.status(200).json({ status: 200, message: "User verified successfully", data: verifiedUser });
   } catch (err) {
     return res.json({ status: 500, data: "Internal server error", message: err.message });
@@ -165,6 +161,90 @@ const deleteUser = asyncHandler(async (req, res) => {
   }
 });
 
+const forgetPassword = asyncHandler(async (req, res) => {
+  try {
+    console.log("yha");
+    const { email } = req.body;
+    console.log(email);
+    const user = await prisma.user.findUnique({ where: { email } });
+
+    if (!user) {
+      return res.json({ status: 404, message: "User not found" });
+    }
+
+    if (!user.isVerified) {
+      return res.json({ status: 400, message: "User is not verified" });
+    }
+
+    const otp = otpGenerator();
+    const currentDate = new Date();
+
+    console.log("otp generated");
+
+    const otpAdded = await prisma.user.update({
+      where: { email },
+      data: { otp, updated_at: currentDate }
+    });
+
+    await sendEmail(email, forgetOtpSubject(), forgetOtpMailBody(otp, user.name));
+
+    return res.status(201).json({ status: "success", message: "OTP has been sent to your email" });
+  } catch (err) {
+    return res.status(500).json({ status: 500, data: "Internal server error", message: err.message });
+  }
+});
+
+const forgetPasswordOtpVerify = asyncHandler(async (req, res) => {
+  try {
+    const { otp, email } = req.body;
+
+    const user = await prisma.user.findUnique({ where: { email } });
+
+    if (!user) {
+      return res.status(404).json({ status: 404, message: "User not found" });
+    }
+
+    if (otp !== user.otp) {
+      return res.status(400).json({ status: 400, message: "Invalid OTP" });
+    }
+
+    // const updateOtp = await prisma.user.update({
+    //   where: { email },
+    //   data: { otp: "000000" }
+    // });
+
+    return res.status(200).json({ status: "success", message: "OTP verified successfully" });
+  } catch (err) {
+    return res.json({ status: 500, data: "Internal server error", message: err });
+  }
+});
+
+const forgetPasswordUpdate = asyncHandler(async (req, res) => {
+  try {
+    const { email, password, otp } = req.body;
+
+    const user = await prisma.user.findUnique({ where: { email } });
+
+    if (!user) {
+      return res.status(404).json({ status: 404, message: "User not found" });
+    }
+
+    if (otp !== user.otp) {
+      return res.status(400).json({ status: 400, message: "Invalid OTP" });
+    }
+    const hashedPassword = await bcrypt.hash(password, Number(process.env.PASS_SALT));
+
+    const updatePassword = await prisma.user.update({
+      where: { email },
+      data: { password: hashedPassword, otp: "000000", updated_at: new Date() }
+    })
+
+    return res.status(201).json({ status: "success", message: "Password has been updated" });
+  } catch (err) {
+    return res.status(500).json({ status: 500, data: "Internal server error", message: err.message });
+  }
+});
+
 module.exports = {
   getAllUsers,
   createUser,
@@ -172,4 +252,7 @@ module.exports = {
   deleteUser,
   signIn,
   verifyUser,
+  forgetPassword,
+  forgetPasswordUpdate,
+  forgetPasswordOtpVerify,
 };
