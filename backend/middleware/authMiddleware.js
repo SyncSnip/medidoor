@@ -8,15 +8,18 @@ const authMiddleware = asyncHandler(async (req, res, next) => {
     token = req.headers.authorization.split(" ")[1];
     try {
       if (token) {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        console.log(token);
+        const decoded = jwt.verify(String(token), process.env.JWT_SECRET);
+        console.log(decoded);
         const { email, id } = decoded;
+
         const user = await prisma.user.findUnique({ where: { id } });
         req.user = user;
-        console.log(`pass the tokken: ${user.email}`);
+        console.log(`pass the token: ${user.email}`);
         next();
       }
     } catch (err) {
-      throw new Error("Authorized token expired, Please login again");
+      return res.status(401).json({ status: "failure", message: "Invalid token", data: err });
     }
   } else {
     throw new Error("Authorized token is not provided");

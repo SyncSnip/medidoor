@@ -10,14 +10,16 @@ const createUser = asyncHandler(async (req, res) => {
     const { name, password, email } = req.body;
 
     const findUser = await prisma.user.findUnique({
-      where: { email: email },
+      where: { email },
     });
+
+    console.log(findUser);
 
     if (findUser) return res.json({ status: 400, message: "User  already exists" });
 
     const hashedPassword = await bcrypt.hash(password, Number(process.env.PASS_SALT));
 
-    // generate otp
+    // * generate otp
     const otp = Math.floor(100000 + Math.random() * 900000);
 
     await sendEmail(email, verifyEmailSubject(), verifyEmailBody(otp, name));
@@ -39,7 +41,7 @@ const createUser = asyncHandler(async (req, res) => {
       status: 201,
       message: "New User has been created successfully",
       token,
-      data: userWithoutPassword
+      data: userWithoutPassword,
     });
   } catch (err) {
     throw new Error(err);
@@ -52,12 +54,10 @@ const createUser = asyncHandler(async (req, res) => {
 const verifyUser = asyncHandler(async (req, res) => {
   try {
     const { otp } = req.body;
+    const user = req.user;
     const { email, id } = req.user;
 
-
-    const user = await prisma.user.findUnique({ where: { email, id } });
-
-    // console.log(`user: ${user.email} is here`);
+    console.log(`user: ${user.email} is here`);
     if (!user) {
       return res.status(404).json({ status: 404, message: "User not found" });
     }
@@ -66,16 +66,21 @@ const verifyUser = asyncHandler(async (req, res) => {
       return res.status(403).json({ status: 400, message: "Invalid OTP" });
     }
 
-
-    console.log(Date.now());
-    const verifiedUser = prisma.user.update({
-      where: { email, id },
+    // console.log(new Date());
+    // console.log(Date().toISOString());
+    const currentDate = new Date();
+    console.log(currentDate);
+    const verifiedUser = await prisma.user.update({
+      where: { email },
       data: {
         otp: "000000",
         isVerified: true,
-        updated_at: Date.now()
+        updated_at: currentDate,
       },
-    })
+    });
+
+    const userCheck = await prisma.user.findUnique({ where: { email } });
+    console.log(userCheck.toString());
     return res.status(200).json({ status: 200, message: "User verified successfully", data: verifiedUser });
   } catch (err) {
     return res.json({ status: 500, data: "Internal server error", message: err.message });
