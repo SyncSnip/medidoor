@@ -4,7 +4,14 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const prisma = require('../utility/database_connect.js');
 const sendEmail = require('../utility/send_mail.js');
-const { verifyEmailBody, verifyEmailSubject, forgetOtpSubject, forgetOtpMailBody } = require('../config/messageConfig.js');
+const {
+  verifyEmailBody,
+  verifyEmailSubject,
+  forgetOtpSubject,
+  forgetOtpMailBody,
+  verificationDoneBody,
+  verificationDoneSubject,
+} = require('../config/messageConfig.js');
 const { otpGenerator } = require('../config/otp_generator.js');
 
 const createUser = asyncHandler(async (req, res) => {
@@ -75,7 +82,8 @@ const verifyUser = asyncHandler(async (req, res) => {
       },
     });
 
-    const userCheck = await prisma.user.findUnique({ where: { email } });
+    // const { password: _, ...userWithoutPassword } = user;
+    await sendEmail(email, verificationDoneSubject(), verificationDoneBody(user.name));
 
     return res.status(200).json({ status: 200, message: "User verified successfully", data: verifiedUser });
   } catch (err) {
@@ -163,9 +171,7 @@ const deleteUser = asyncHandler(async (req, res) => {
 
 const forgetPassword = asyncHandler(async (req, res) => {
   try {
-    console.log("yha");
     const { email } = req.body;
-    console.log(email);
     const user = await prisma.user.findUnique({ where: { email } });
 
     if (!user) {
@@ -207,11 +213,6 @@ const forgetPasswordOtpVerify = asyncHandler(async (req, res) => {
     if (otp !== user.otp) {
       return res.status(400).json({ status: 400, message: "Invalid OTP" });
     }
-
-    // const updateOtp = await prisma.user.update({
-    //   where: { email },
-    //   data: { otp: "000000" }
-    // });
 
     return res.status(200).json({ status: "success", message: "OTP verified successfully" });
   } catch (err) {

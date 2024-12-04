@@ -6,6 +6,9 @@ const forgetOtpSubject = () => {
   return "Reset Your Password for Medidoor";
 }
 
+const verificationDoneSubject = () => {
+  return "Verified User";
+}
 
 
 const verifyEmailBody = (otp, name) => {
@@ -44,9 +47,26 @@ Thank you,
 The Medidoor Team`;
 };
 
+
+const verificationDoneBody = (name) => {
+  return `
+Dear ${name},
+We are excited to inform you that your registration process for the Medidoor app has been successfully completed! Thank you for choosing to join our community.
+
+You can now log in to your account and start exploring all the features and benefits that Medidoor has to offer.
+If you have any questions or need assistance, please feel free to reach out to our support team at medidoor@outlook.com.
+Thank you for being a part of Medidoor!
+
+Best regards,
+The Medidoor Team
+`;
+};
+
 module.exports = {
   verifyEmailBody,
   verifyEmailSubject,
   forgetOtpSubject,
   forgetOtpMailBody,
+  verificationDoneBody,
+  verificationDoneSubject,
 };
