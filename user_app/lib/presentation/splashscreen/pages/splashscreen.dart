@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:user_app/config/extensions/extensions.dart';
+import 'package:user_app/presentation/auth/pages/signup_page.dart';
 import 'package:user_app/redirecting_page.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -42,7 +43,7 @@ class _SplashScreenState extends State<SplashScreen>
 
     Future.delayed(const Duration(seconds: 3), () {
       if (mounted) {
-        context.pushReplacement(const RedirectingPage());
+        context.pushReplacement(const SignupPage());
       }
     });
   }

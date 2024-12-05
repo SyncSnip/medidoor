@@ -1,25 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:user_app/presentation/auth/pages/login.dart'; // Import LoginPage
+import 'package:user_app/config/extensions/extensions.dart';
+import 'package:user_app/presentation/auth/pages/signup_page.dart';
+import 'package:user_app/redirecting_page.dart';
 
-class SignupPage extends StatefulWidget {
-  const SignupPage({super.key});
+import 'forgetmail_page.dart'; // Import SignupPage
+
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
 
   @override
-  State<SignupPage> createState() => _SignupPageState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
-class _SignupPageState extends State<SignupPage> {
+class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _passwordController = TextEditingController();
-  bool _isPasswordValid = true;
-
-  void _validatePassword(String value) {
-    setState(() {
-      _isPasswordValid = value.length >= 8 &&
-          RegExp(r'[0-9]').hasMatch(value) &&
-          RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(value);
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,49 +27,53 @@ class _SignupPageState extends State<SignupPage> {
             children: [
               const SizedBox(height: 20),
               const Text(
-                'New to Medidoor?',
+                'Welcome Back!',
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
               const Text(
-                'Create your account',
+                'Login to your account',
                 style: TextStyle(fontSize: 16, color: Colors.grey),
               ),
               const SizedBox(height: 20),
-              _buildTextField('Enter Name'),
-              const SizedBox(height: 10),
-              _buildTextField('Enter Mobile No.',
-                  keyboardType: TextInputType.phone),
-              const SizedBox(height: 10),
               _buildTextField('Enter Email',
                   keyboardType: TextInputType.emailAddress),
               const SizedBox(height: 10),
-              TextFormField(
-                controller: _passwordController,
-                decoration: InputDecoration(
-                  labelText: 'Set Password',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  errorText: _isPasswordValid
-                      ? null
-                      : 'Must be 8 or more characters and contain at least 1 number\n and 1 special character.',
-                ),
-                obscureText: true,
-                onChanged: _validatePassword,
-              ),
+              _buildTextField('Enter Password', obscureText: true),
               const SizedBox(height: 10),
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Checkbox(value: false, onChanged: (value) {}),
-                  const Text('Remember me'),
+                  Row(
+                    children: [
+                      Checkbox(value: false, onChanged: (value) {}),
+                      const Text('Remember me'),
+                    ],
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      // Handle forgot password
+                    },
+                    child: // Inside LoginPage where Forgot Password button is defined
+                        TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const ForgotPasswordPage()),
+                        );
+                      },
+                      child: const Text('Forgot Password?'),
+                    ),
+                  ),
                 ],
               ),
               const SizedBox(height: 20),
               Center(
                 child: ElevatedButton(
                   onPressed: () {
+                    context.push(const RedirectingPage());
                     if (_formKey.currentState!.validate()) {
-                      // Handle signup logic
+                      // Handle login logic
                     }
                   },
                   style: ElevatedButton.styleFrom(
@@ -83,7 +81,7 @@ class _SignupPageState extends State<SignupPage> {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 50, vertical: 15),
                   ),
-                  child: const Text('Sign Up'),
+                  child: const Text('Login'),
                 ),
               ),
               const SizedBox(height: 20),
@@ -93,11 +91,11 @@ class _SignupPageState extends State<SignupPage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => const LoginPage()),
+                          builder: (context) => const SignupPage()),
                     );
                   },
                   child: const Text(
-                    'Already a user? Login here.',
+                    'New user? Signup here.',
                     style: TextStyle(
                       color: Colors.blue,
                       decoration: TextDecoration.underline,
@@ -109,7 +107,7 @@ class _SignupPageState extends State<SignupPage> {
               Center(
                 child: ElevatedButton.icon(
                   onPressed: () {
-                    // Handle Google signup
+                    // Handle Google login
                   },
                   icon: const Icon(Icons.g_mobiledata),
                   label: const Text('with Google'),
@@ -129,7 +127,8 @@ class _SignupPageState extends State<SignupPage> {
   }
 
   Widget _buildTextField(String label,
-      {TextInputType keyboardType = TextInputType.text}) {
+      {TextInputType keyboardType = TextInputType.text,
+      bool obscureText = false}) {
     return TextFormField(
       decoration: InputDecoration(
         labelText: label,
@@ -138,6 +137,7 @@ class _SignupPageState extends State<SignupPage> {
         ),
       ),
       keyboardType: keyboardType,
+      obscureText: obscureText,
     );
   }
 }
