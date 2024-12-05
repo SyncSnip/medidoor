@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:user_app/config/theme/app_theme.dart';
-import 'package:user_app/redirecting_page.dart';
+
+import 'presentation/auth/pages/signup.dart';
 
 void main() {
   runApp(const MainApp());
@@ -15,8 +16,8 @@ class MainApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
-      themeMode: ThemeMode.system, // Will follow system theme
-      home: const RedirectingPage(),
+      themeMode: ThemeMode.system,
+      home: const SignupPage(), // Changed from RedirectingPage to SplashScreen
     );
   }
 }

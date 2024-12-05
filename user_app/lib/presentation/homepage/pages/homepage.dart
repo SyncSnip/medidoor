@@ -1,14 +1,30 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:user_app/config/assets/app_images.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:user_app/config/extensions/extensions.dart';
 
-class Homepage extends StatelessWidget {
+import '../../../config/assets/app_images.dart';
+
+class Homepage extends StatefulWidget {
   const Homepage({super.key});
 
   @override
+  State<Homepage> createState() => _HomepageState();
+}
+
+class _HomepageState extends State<Homepage> {
+  int activeindex = 0;
+  List<String> images = [
+    AppImages.banner1,
+    AppImages.banner1,
+    AppImages.banner1
+  ];
+  int value = 1;
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: SafeArea(
           child: Padding(
@@ -16,172 +32,169 @@ class Homepage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Location & Profile Row
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        const Icon(Icons.location_on, color: Colors.grey),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                Padding(
+                  padding: const EdgeInsets.only(left: 8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      SizedBox(
+                        height: 50,
+                        child: Row(
                           children: [
-                            Text(
-                              'New Delhi',
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.grey[600],
-                              ),
+                            const CircleAvatar(
+                              backgroundColor: Color.fromARGB(255, 82, 142, 47),
+                              radius: 16,
+                              child: Icon(Icons.location_on_outlined),
                             ),
+                            10.aw,
                             const Text(
-                              'Welcome, Adarsh!',
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                              "New Delhi",
+                              style: TextStyle(fontWeight: FontWeight.w600),
+                            )
                           ],
                         ),
-                      ],
-                    ),
-                    CircleAvatar(
-                      radius: 20,
-                      backgroundImage: const Image(
-                        image: CachedNetworkImageProvider(
-                            'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=1000&auto=format&fit=crop'),
-                      ).image,
-                    )
-                  ],
-                ),
-
-                const SizedBox(height: 16),
-
-                // Search Bar
-                TextField(
-                  decoration: InputDecoration(
-                    hintText: 'Search medicines, doctors...',
-                    prefixIcon: const Icon(Icons.search),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide.none,
-                    ),
-                    filled: true,
-                    fillColor: Colors.grey[200],
+                      ),
+                      const SizedBox(
+                          width: 100,
+                          height: 50,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              CircleAvatar(
+                                backgroundColor:
+                                    Color.fromARGB(255, 82, 142, 47),
+                                radius: 16,
+                                child: Icon(Icons.shopping_basket_rounded),
+                              ),
+                              SizedBox(
+                                width: 15,
+                              ),
+                              CircleAvatar(
+                                  backgroundColor:
+                                      Color.fromARGB(255, 82, 142, 47),
+                                  radius: 16,
+                                  child: Icon(
+                                    Icons.notifications,
+                                  )),
+                            ],
+                          )),
+                    ],
                   ),
                 ),
-
                 const SizedBox(height: 16),
-
-                // Banner
-                Container(
-                  height: 140,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    image: const DecorationImage(
-                      image: NetworkImage(
-                          'https://img.freepik.com/free-vector/flat-medical-background_52683-48938.jpg'),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      gradient: LinearGradient(
-                        begin: Alignment.centerLeft,
-                        end: Alignment.centerRight,
-                        colors: [
-                          Colors.black.withOpacity(0.6),
-                          Colors.transparent,
-                        ],
+                Center(
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.87,
+                    height: MediaQuery.of(context).size.height * 0.06,
+                    child: TextField(
+                      decoration: InputDecoration(
+                        hintText: 'Search',
+                        prefixIcon: const Icon(Icons.search),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30),
+                          borderSide: BorderSide.none,
+                        ),
+                        filled: true,
+                        fillColor: Colors.grey[200],
                       ),
                     ),
-                    padding: const EdgeInsets.all(16),
-                    // ignore: prefer_const_constructors
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        Text(
-                          'Order Medicines',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                        Text(
-                          'Flat 50% Discount',
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ],
-                    ),
                   ),
                 ),
-
-                SizedBox(height: 24),
-
-                Container(
-                  height: 200,
-                  width: 200,
-                  // decoration: BoxDecoration(
-                  //     image: DecorationImage(
-                  //         image: )),
-                  child: SvgPicture.asset(AppImages.diabetes),
+                const SizedBox(height: 16),
+                CarouselSlider.builder(
+                    options: CarouselOptions(
+                        autoPlayAnimationDuration:
+                            const Duration(milliseconds: 800),
+                        padEnds: true,
+                        autoPlay: true,
+                        height: MediaQuery.of(context).size.height * 0.2,
+                        viewportFraction: 1,
+                        enlargeCenterPage: true,
+                        enlargeStrategy: CenterPageEnlargeStrategy.height,
+                        onPageChanged: (index, reason) {
+                          setState(() {
+                            activeindex = index;
+                          });
+                        }),
+                    itemCount: 3,
+                    itemBuilder: (context, index, realIndex) {
+                      // final res = wallpaperImage[index];
+                      return Container(
+                        // height: 140,
+                        height: 120,
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              image: DecorationImage(
+                                  image: AssetImage(images[index]))),
+                          padding: const EdgeInsets.all(16),
+                        ),
+                      );
+                    }),
+                const SizedBox(
+                  height: 20,
                 ),
-
-                // Quick Actions Grid
+                Center(child: buildIndicator()),
+                20.ah,
+                Text("Welcome, Piyush!",
+                    style: GoogleFonts.sourceSans3(
+                        color: Colors.black,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 18)),
+                20.ah,
                 GridView.count(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   crossAxisCount: 2,
-                  mainAxisSpacing: 16,
-                  crossAxisSpacing: 16,
-                  childAspectRatio: 1.5,
+                  mainAxisSpacing: 14,
+                  crossAxisSpacing: 14,
+                  childAspectRatio: 2.18,
                   children: [
                     _buildQuickActionCard(
                       'Order medicines',
-                      'Delivered to your home',
-                      'https://cdn-icons-png.flaticon.com/512/822/822143.png',
-                      Colors.blue[50]!,
+                      'Delivered within 15 \nminutes',
+                      const Color.fromARGB(255, 174, 222, 238),
+                      AppImages.requestMedicine,
                     ),
                     _buildQuickActionCard(
-                      'Consult Doctor',
-                      'Online consultation',
-                      'https://cdn-icons-png.flaticon.com/512/3774/3774299.png',
-                      Colors.green[50]!,
+                      'Consult a Doctor',
+                      'Get on a 1 on-1 Call \nwith doctors',
+                      const Color.fromARGB(255, 201, 235, 174),
+                      AppImages.consultDoctor,
                     ),
                     _buildQuickActionCard(
                       'Request a medicine',
-                      'Send prescription',
-                      'https://cdn-icons-png.flaticon.com/512/4006/4006511.png',
-                      Colors.orange[50]!,
+                      'Request currently \nunavailable medicines',
+                      const Color.fromARGB(255, 240, 178, 128),
+                      AppImages.orderMedicine,
                     ),
                     _buildQuickActionCard(
                       'Lab testing',
-                      'At your doorstep',
-                      'https://cdn-icons-png.flaticon.com/512/1052/1052191.png',
-                      Colors.purple[50]!,
+                      'Book an appointment\nfor lab tests',
+                      const Color.fromARGB(255, 235, 185, 212),
+                      AppImages.labTest,
                     ),
                   ],
                 ),
-
                 const SizedBox(height: 24),
-
-                // Trending Products
-                const Text(
-                  'Trending Products',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
+                Container(
+                  decoration: const BoxDecoration(
+                    color: Colors.amber,
                   ),
                 ),
-
+                Text(
+                  'Trending Products',
+                  style: GoogleFonts.sourceSans3(
+                    fontSize: 20,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
                 const SizedBox(height: 16),
-
                 SizedBox(
                   height: 200,
                   child: ListView.builder(
@@ -192,20 +205,16 @@ class Homepage extends StatelessWidget {
                     },
                   ),
                 ),
-
                 const SizedBox(height: 24),
-
-                // Daily Essentials
-                const Text(
-                  'Daily Essentials',
-                  style: TextStyle(
+                Text(
+                  'Daily Health Essentials',
+                  style: GoogleFonts.sourceSans3(
+                    color: Colors.black,
                     fontSize: 20,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
-
                 const SizedBox(height: 16),
-
                 GridView.count(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
@@ -219,10 +228,7 @@ class Homepage extends StatelessWidget {
                     );
                   }),
                 ),
-
                 const SizedBox(height: 24),
-
-                // Custom Card
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
@@ -257,10 +263,7 @@ class Homepage extends StatelessWidget {
                     ],
                   ),
                 ),
-
                 const SizedBox(height: 24),
-
-                // Personal Care
                 const Text(
                   'Personal Care',
                   style: TextStyle(
@@ -268,9 +271,7 @@ class Homepage extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-
                 const SizedBox(height: 16),
-
                 GridView.count(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
@@ -293,34 +294,49 @@ class Homepage extends StatelessWidget {
   }
 
   Widget _buildQuickActionCard(
-      String title, String subtitle, String imageUrl, Color color) {
+      String title, String subtitle, Color color, String img) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
+        boxShadow: const [
+          BoxShadow(
+              offset: Offset(2, 2),
+              spreadRadius: 2,
+              color: Color.fromARGB(255, 217, 217, 217))
+        ],
         color: color,
         borderRadius: BorderRadius.circular(12),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Stack(
         children: [
-          Image.network(
-            imageUrl,
-            height: 30,
-            width: 30,
-          ),
-          const SizedBox(height: 8),
-          Text(
-            title,
-            maxLines: 1,
-            style: const TextStyle(
-              overflow: TextOverflow.ellipsis,
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
+          Positioned(
+            right: 0,
+            bottom: 0,
+            child: Image(
+              image: AssetImage(img),
+              height: 60,
             ),
           ),
-          Text(
-            subtitle,
-            style: const TextStyle(fontSize: 12),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 8),
+              Text(
+                title,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: GoogleFonts.sourceSans3(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 14,
+                    color: Colors.black),
+              ),
+              Text(
+                subtitle,
+                overflow: TextOverflow.ellipsis,
+                style:
+                    GoogleFonts.sourceSans3(fontSize: 10, color: Colors.black),
+              ),
+            ],
           ),
         ],
       ),
@@ -329,8 +345,8 @@ class Homepage extends StatelessWidget {
 
   Widget _buildProductCard() {
     return Container(
-      width: 160,
-      margin: const EdgeInsets.only(right: 16),
+      width: 130,
+      height: 145,
       decoration: BoxDecoration(
         border: Border.all(color: Colors.grey[300]!),
         borderRadius: BorderRadius.circular(12),
@@ -340,30 +356,35 @@ class Homepage extends StatelessWidget {
         children: [
           Container(
             height: 120,
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
-              image: DecorationImage(
-                image: NetworkImage(
-                  'https://cdn01.pharmeasy.in/dam/products_otc/205923/maxirich-multivitamin-minerals-antioxidant-calcium-box-10-softgels-6.1-1726646410.jpg?dim=700x0&dpr=1&q=100',
-                ),
-                fit: BoxFit.cover,
-              ),
-            ),
+            decoration: BoxDecoration(
+                image:
+                    DecorationImage(image: AssetImage(AppImages.vicksVaporub)),
+                borderRadius:
+                    const BorderRadius.vertical(top: Radius.circular(12)),
+                boxShadow: const [
+                  BoxShadow(
+                    offset: Offset(
+                      0,
+                      2,
+                    ),
+                  )
+                ]),
           ),
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(3.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text(
                   'Multivitamin',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
                 ),
                 Text(
                   '₹199',
                   style: TextStyle(
+                    fontSize: 8,
                     color: Colors.green[700],
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w400,
                   ),
                 ),
               ],
@@ -372,5 +393,21 @@ class Homepage extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Widget buildIndicator() {
+    return AnimatedSmoothIndicator(
+        onDotClicked: (index) {
+          activeindex = index;
+        },
+        activeIndex: activeindex,
+        count: 3,
+        effect: JumpingDotEffect(
+          spacing: 16,
+          dotColor: Theme.of(context).colorScheme.primary,
+          activeDotColor: const Color.fromARGB(255, 54, 152, 233),
+          dotHeight: 8,
+          dotWidth: 8,
+        ));
   }
 }
