@@ -54,7 +54,7 @@ class _HomepageState extends State<Homepage> {
                           ],
                         ),
                       ),
-                      const SizedBox(
+                      SizedBox(
                           width: 100,
                           height: 50,
                           child: Row(
@@ -64,7 +64,7 @@ class _HomepageState extends State<Homepage> {
                                 backgroundColor:
                                     Color.fromARGB(255, 82, 142, 47),
                                 radius: 16,
-                                child: Icon(Icons.shopping_basket_rounded),
+                                child: Image.asset(AppImages.cart),
                               ),
                               SizedBox(
                                 width: 15,
@@ -296,7 +296,7 @@ class _HomepageState extends State<Homepage> {
   Widget _buildQuickActionCard(
       String title, String subtitle, Color color, String img) {
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
       decoration: BoxDecoration(
         boxShadow: const [
           BoxShadow(
@@ -345,6 +345,7 @@ class _HomepageState extends State<Homepage> {
 
   Widget _buildProductCard() {
     return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 10),
       width: 130,
       height: 145,
       decoration: BoxDecoration(

@@ -1,8 +1,7 @@
-
 import 'package:flutter/material.dart';
 import 'package:user_app/config/extensions/extensions.dart';
-import 'package:user_app/presentation/auth/pages/signup_page.dart';
-import 'package:user_app/redirecting_page.dart';
+import 'package:user_app/config/theme/app_color.dart';
+import 'package:user_app/presentation/auth/pages/sign_in_page.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -43,7 +42,7 @@ class _SplashScreenState extends State<SplashScreen>
 
     Future.delayed(const Duration(seconds: 3), () {
       if (mounted) {
-        context.pushReplacement(const SignupPage());
+        context.pushReplacement(const SignInPage());
       }
     });
   }
@@ -106,7 +105,7 @@ class _SplashScreenState extends State<SplashScreen>
                         style: TextStyle(
                           fontSize: 32,
                           fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                          color: AppColors.white,
                           letterSpacing: 1.5,
                         ),
                       ),
@@ -116,7 +115,7 @@ class _SplashScreenState extends State<SplashScreen>
                         'Healthcare at your doorstep',
                         style: TextStyle(
                           fontSize: 16,
-                          color: Colors.white,
+                          color: AppColors.white,
                           letterSpacing: 0.5,
                         ),
                       ),

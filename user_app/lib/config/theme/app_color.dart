@@ -12,6 +12,8 @@ class AppColors {
   // static const Color appPurple = Color(0xffab98f4);
   // static const Color appSecondaryPurple = Color(0xffc8bbf9);
   // Light Theme Colors
+
+  static const Color white = Colors.white;
   static const Color lightPrimary = Color(0xFF1976D2);
   static const Color lightBackground = Color(0xFFFFFFFF);
   static const Color lightSurface = Color(0xFFF5F5F5);
@@ -31,5 +33,4 @@ class AppColors {
   static const Color success = Color(0xFF4CAF50);
   static const Color error = Color(0xFFE53935);
   static const Color warning = Color(0xFFFFB300);
-
 }

@@ -3,10 +3,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:user_app/config/theme/app_theme.dart';
 import 'package:user_app/presentation/splashscreen/pages/splashscreen.dart';
 
-import 'presentation/auth/pages/signup_page.dart';
-
 void main() async {
-  await dotenv.load(fileName: ".env");
+  await dotenv.load(fileName: "assets/.env");
   runApp(const MainApp());
 }
 
@@ -20,7 +18,8 @@ class MainApp extends StatelessWidget {
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.system,
-      home: SplashScreen(), // Changed from RedirectingPage to SplashScreen
+      home:
+          const SplashScreen(), // Changed from RedirectingPage to SplashScreen
     );
   }
 }

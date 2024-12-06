@@ -31,7 +31,7 @@ const isVerifiedUser = asyncHandler(async (req, res, next) => {
   const existingUser = await prisma.user.findUnique({ where: { email } });
 
   if (!existingUser || !existingUser.isVerified) {
-    return res.json({ status: 403, message: "You are not verified user" });
+    return res.status(403).json({ status: 403, message: "You are not verified user" });
   } else {
     next();
   }

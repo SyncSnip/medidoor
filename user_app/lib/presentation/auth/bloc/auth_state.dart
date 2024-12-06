@@ -3,10 +3,24 @@ part of 'auth_bloc.dart';
 @immutable
 abstract class AuthState {}
 
-class AuthInitial extends AuthState {}
+// * auth sign in state
 
-class AuthLoading extends AuthState {}
+class AuthSignInInitialState extends AuthState {}
 
-class AuthSuccess extends AuthState {}
+class AuthSignInLoadingState extends AuthState {}
 
-class AuthFailure extends AuthState {}
+class AuthSignInSuccessState extends AuthState {}
+
+class AuthSignInFailureState extends AuthState {}
+
+class AuthSignInNotVerifiedUserState extends AuthState {}
+
+// * auth sign up state
+
+class AuthSignUpInitialState extends AuthState {}
+
+class AuthSignUpLoadingState extends AuthState {}
+
+class AuthSignUpSuccessState extends AuthState {}
+
+class AuthSignUpFailureState extends AuthState {}
