@@ -20,29 +20,56 @@ model User {
   password   String?  @db.VarChar(255)
   isVerified Boolean  @default(false)
   otp        String   @default("000000")
+  isAdmin    Boolean  @default(false)
   created_at DateTime @default(now())
   updated_at DateTime @default(now())
 }
 
 model Product {
-  productId   Int      @id @default(autoincrement())
-  name        String
-  price       Decimal  @db.Decimal(10, 2)
+  prodId      Int         @id @default(autoincrement())
+  price       Decimal     @db.Decimal(10, 2)
+  name        String?
   description String?
+  quantity    String
   userId      Int
-  quantity    Int
+  prodTypeId  Int
+  productType ProductType @relation(fields: [prodTypeId], references: [prodTypeId])
+  created_at  DateTime    @default(now())
+  updated_at  DateTime    @default(now())
+}
+
+model ProductType {
+  prodTypeId  Int       @id @default(autoincrement())
+  name        String
+  description String
+  typeCode    String
   reviews     Review[]
-  created_at  DateTime @default(now())
-  updated_at  DateTime @default(now())
+  Product     Product[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default(now())
 }
 
 model Review {
-  id        Int      @id @default(autoincrement())
-  content   String
-  rating    Int
+  id          Int          @id @default(autoincrement())
+  userId      Int
+  prodId      Int
+  content     String
+  rating      Int?
+  ProductType ProductType? @relation(fields: [prodTypeId], references: [prodTypeId])
+  prodTypeId  Int?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @default(now())
+}
+
+model Payment {
+  paymentId Int    @id @unique @default(autoincrement())
   userId    Int
-  productId Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
-  product   Product  @relation(fields: [productId], references: [productId])
+  amount    BigInt
+  method    String
+  status    String
+}
+
+model Order {
+  orderId Int @unique @default(autoincrement())
+  userId  Int
 }

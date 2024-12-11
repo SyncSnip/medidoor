@@ -60,6 +60,49 @@ class ProfilePage extends StatelessWidget {
                     ),
                   ),
                 ),
+              const SizedBox(height: 20),
+              ListTile(
+                leading: const Icon(Icons.history),
+                title: const Text('Order History'),
+                onTap: () {
+                  // Navigate to Order History Page
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.location_on),
+                title: const Text('Manage Saved Address'),
+                onTap: () {
+                  // Navigate to Manage Saved Address Page
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.edit),
+                title: const Text('Edit Profile'),
+                onTap: () {
+                  // Navigate to Edit Profile Page
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.info),
+                title: const Text('About the App'),
+                onTap: () {
+                  // Navigate to About the App Page
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.lock),
+                title: const Text('Account Privacy'),
+                onTap: () {
+                  // Navigate to Account Privacy Page
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.payment),
+                title: const Text('Manage Transactions'),
+                onTap: () {
+                  // Navigate to Manage Transactions Page
+                },
+              ),
             ],
           );
         },

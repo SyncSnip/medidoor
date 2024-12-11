@@ -34,7 +34,6 @@ Future<Response> request(
 }) async {
   final String baseUrl = dotenv.env['base_url'] ?? "";
   final url = Uri.http(baseUrl, '/api/v1/$path', params);
-  // final url = '$urlHtpp';
   final body = jsonEncode(json);
   late Response response;
   log('api hit: $url');
