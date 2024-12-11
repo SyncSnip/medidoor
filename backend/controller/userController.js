@@ -1,4 +1,3 @@
-
 const asyncHandler = require('express-async-handler');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
@@ -22,7 +21,7 @@ const createUser = asyncHandler(async (req, res) => {
       where: { email },
     });
 
-    if (findUser) return res.json({ status: 400, message: "User  already exists" });
+    if (findUser) return res.status(400).json({ status: 400, message: "User already exists" });
 
     const hashedPassword = await bcrypt.hash(password, Number(process.env.PASS_SALT));
 
@@ -36,7 +35,7 @@ const createUser = asyncHandler(async (req, res) => {
     });
 
     // Remove the password field from the response
-    const { password: _, ...userWithoutPassword } = newUser;
+    const { password: _, otp: _otp, ...userWithoutPassword } = newUser;
 
     const token = jwt.sign(
       { id: newUser.id, email: newUser.email }, process.env.JWT_SECRET, { expiresIn: '1h' });
@@ -61,7 +60,7 @@ const verifyUser = asyncHandler(async (req, res) => {
     const { email, id } = req.user;
 
     if (user.isVerified) {
-      return res.json({ status: 401, message: "User is already verified" });
+      return res.status(401).json({ status: 401, message: "User is already verified" });
     }
 
     if (!user) {
@@ -82,7 +81,7 @@ const verifyUser = asyncHandler(async (req, res) => {
       },
     });
 
-    // const { password: _, ...userWithoutPassword } = user;
+    const { password: _, ...userWithoutPassword } = user;
     await sendEmail(email, verificationDoneSubject(), verificationDoneBody(user.name));
 
     return res.status(200).json({ status: 200, message: "User verified successfully", data: verifiedUser });
@@ -102,8 +101,6 @@ const signIn = asyncHandler(async (req, res) => {
     if (!user) {
       return res.status(400).json({ status: 400, message: "Invalid email or password" });
     }
-
-    console.log(user);
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
 

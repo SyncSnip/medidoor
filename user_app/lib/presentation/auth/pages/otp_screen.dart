@@ -1,15 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:user_app/common/widgets/loading.dart';
+import 'package:user_app/presentation/auth/bloc/auth_bloc.dart';
 import 'package:user_app/presentation/auth/pages/set_pass_page.dart';
 
 class OtpVerificationPage extends StatefulWidget {
-  const OtpVerificationPage({super.key});
+  final bool isSignUp;
+
+  const OtpVerificationPage({
+    super.key,
+    this.isSignUp = true,
+  });
 
   @override
   State<OtpVerificationPage> createState() => _OtpVerificationPageState();
 }
 
 class _OtpVerificationPageState extends State<OtpVerificationPage> {
+  final AuthBloc _authBloc = AuthBloc();
   final List<TextEditingController> _emailOtpControllers = List.generate(
     6,
     (index) => TextEditingController(),
@@ -50,118 +59,127 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 50),
-            IconButton(
-              icon: const Icon(
-                Icons.arrow_back,
-                color: Colors.green,
-              ),
-              onPressed: () => Navigator.pop(context),
-            ),
-            const SizedBox(height: 20),
-           
-            const SizedBox(height: 30),
-            const Text(
-              'Enter OTP',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 20),
-            const Text(
-              'An OTP is sent to the entered Email address.',
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.grey,
-              ),
-            ),
-            const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: List.generate(
-                6,
-                (index) => _buildOTPField(
-                  _emailOtpControllers[index],
-                  _emailFocusNodes[index],
-                  index,
-                  true,
-                ),
-              ),
-            ),
-            const SizedBox(height: 30),
-            const Text(
-              'An OTP is sent to the entered Mobile number.',
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.grey,
-              ),
-            ),
-            const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: List.generate(
-                6,
-                (index) => _buildOTPField(
-                  _mobileOtpControllers[index],
-                  _mobileFocusNodes[index],
-                  index,
-                  false,
-                ),
-              ),
-            ),
-            const SizedBox(height: 40),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () {
-                  // Validate and process OTP
-                  String emailOtp = _emailOtpControllers
-                      .map((controller) => controller.text)
-                      .join();
-                  String mobileOtp = _mobileOtpControllers
-                      .map((controller) => controller.text)
-                      .join();
-
-                  if (emailOtp.length == 6 && mobileOtp.length == 6) {
-                    // Navigate to set password page
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const SetPasswordPage(),
-                      ),
-                    );
-                    //set new password page
-                    // Inside your OTP verification success handler
-Navigator.push(
-  context,
-  MaterialPageRoute(builder: (context) => const SetPasswordPage()),
-);
-                  }
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green,
-                  padding: const EdgeInsets.symmetric(vertical: 15),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
+      body: BlocConsumer<AuthBloc, AuthState>(
+        bloc: _authBloc,
+        listener: (context, state) {},
+        builder: (context, state) {
+          if (state is AuthVerifyEmailOtpLoadingState) {
+            return const Loading();
+          }
+          return SingleChildScrollView(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 50),
+                IconButton(
+                  icon: const Icon(
+                    Icons.arrow_back,
+                    color: Colors.green,
                   ),
+                  onPressed: () => Navigator.pop(context),
                 ),
-                child: const Text(
-                  'Verify',
+                const SizedBox(height: 20),
+                const SizedBox(height: 30),
+                const Text(
+                  'Enter OTP',
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 24,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-              ),
+                const SizedBox(height: 20),
+                const Text(
+                  'An OTP is sent to the entered Email address.',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.grey,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: List.generate(
+                    6,
+                    (index) => _buildOTPField(
+                      _emailOtpControllers[index],
+                      _emailFocusNodes[index],
+                      index,
+                      true,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 30),
+                const Text(
+                  'An OTP is sent to the entered Mobile number.',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.grey,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: List.generate(
+                    6,
+                    (index) => _buildOTPField(
+                      _mobileOtpControllers[index],
+                      _mobileFocusNodes[index],
+                      index,
+                      false,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 40),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      // Validate and process OTP
+                      String emailOtp = _emailOtpControllers
+                          .map((controller) => controller.text)
+                          .join();
+                      String mobileOtp = _mobileOtpControllers
+                          .map((controller) => controller.text)
+                          .join();
+
+                      if (emailOtp.length == 6 && mobileOtp.length == 6) {
+                        // Navigate to set password page
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const SetPasswordPage(),
+                          ),
+                        );
+                        //set new password page
+                        // Inside your OTP verification success handler
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const SetPasswordPage()),
+                        );
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green,
+                      padding: const EdgeInsets.symmetric(vertical: 15),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                    ),
+                    child: const Text(
+                      'Verify',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }

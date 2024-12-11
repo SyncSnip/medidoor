@@ -1,7 +1,15 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:user_app/common/pages/no_internet_page.dart';
+import 'package:user_app/config/config_files/local_storage_key.dart';
 import 'package:user_app/config/extensions/extensions.dart';
 import 'package:user_app/config/theme/app_color.dart';
+import 'package:user_app/data/sources/auth_source.dart';
 import 'package:user_app/presentation/auth/pages/sign_in_page.dart';
+import 'package:user_app/redirecting_page.dart';
+import 'package:user_app/config/utils/internet_connectivity.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -16,9 +24,54 @@ class _SplashScreenState extends State<SplashScreen>
   late Animation<double> _fadeAnimation;
   late Animation<double> _scaleAnimation;
 
-  @override
-  void initState() {
-    super.initState();
+  Future<void> _initializeApp() async {
+    try {
+      final SharedPreferences pref = await SharedPreferences.getInstance();
+      final String? token = pref.getString(AppKey().getTokenKey);
+      final String? name = pref.getString(AppKey().getNameKey);
+      final String? email = pref.getString(AppKey().getEmailKey);
+
+      // Set auth data
+      AuthSource()
+        ..setToken = token ?? ''
+        ..setName = name ?? ''
+        ..setEmail = email ?? '';
+
+      await Future.delayed(const Duration(seconds: 3));
+
+      final bool isInternetAvailable =
+          await InternetConnectivityManager.checkConnection();
+
+      log(AuthSource().getName ?? "no name");
+      log(AuthSource().getEmail ?? "no name");
+      log(AuthSource().getToken ?? "no name");
+
+      if (!mounted) return;
+      log(isInternetAvailable.toString());
+
+      // First check internet connection
+      if (!isInternetAvailable) {
+        context.pushReplacement(NoInternetPage(
+          previousRoute: widget,
+        ));
+        return;
+      }
+
+      // Then check authentication
+      if (token != null && token.isNotEmpty) {
+        context.pushReplacement(const RedirectingPage());
+      } else {
+        context.pushReplacement(const SignInPage());
+      }
+    } catch (e) {
+      debugPrint('Error in splash screen: $e');
+      if (mounted) {
+        context.pushReplacement(const SignInPage());
+      }
+    }
+  }
+
+  void _setupAnimations() {
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 2),
@@ -39,12 +92,13 @@ class _SplashScreenState extends State<SplashScreen>
     );
 
     _controller.forward();
+  }
 
-    Future.delayed(const Duration(seconds: 3), () {
-      if (mounted) {
-        context.pushReplacement(const SignInPage());
-      }
-    });
+  @override
+  void initState() {
+    super.initState();
+    _setupAnimations();
+    _initializeApp();
   }
 
   @override
@@ -61,10 +115,7 @@ class _SplashScreenState extends State<SplashScreen>
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [
-              Color(0xFF4CAF50), // Green shade
-              Color(0xFF81C784), // Lighter green
-            ],
+            colors: AppColors.primaryGradient,
           ),
         ),
         child: Center(
@@ -86,7 +137,7 @@ class _SplashScreenState extends State<SplashScreen>
                           borderRadius: BorderRadius.circular(20),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.1),
+                              color: AppColors.shadowLight,
                               blurRadius: 20,
                               spreadRadius: 5,
                             ),
@@ -95,7 +146,7 @@ class _SplashScreenState extends State<SplashScreen>
                         child: const Icon(
                           Icons.medical_services,
                           size: 80,
-                          color: Color(0xFF4CAF50),
+                          color: AppColors.primary,
                         ),
                       ),
                       const SizedBox(height: 20),

@@ -92,9 +92,13 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                         ),
                       );
                       Navigator.push(
-  context,
-  MaterialPageRoute(builder: (context) => const OtpVerificationPage()),
-);
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const OtpVerificationPage(
+                            isSignUp: false,
+                          ),
+                        ),
+                      );
                     }
                   },
                   style: ElevatedButton.styleFrom(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:user_app/config/extensions/extensions.dart';
 
 class SomethingWentWrong extends StatelessWidget {
   const SomethingWentWrong({
@@ -14,7 +15,7 @@ class SomethingWentWrong extends StatelessWidget {
         backgroundColor: Colors.transparent,
         leading: InkWell(
           onTap: () {
-            // context.pop;
+            context.pop();
           },
           child: const Icon(Icons.arrow_back_ios),
         ),

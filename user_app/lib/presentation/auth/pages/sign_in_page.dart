@@ -103,20 +103,14 @@ class _SignInPageState extends State<SignInPage> {
                         ),
                         TextButton(
                           onPressed: () {
-                            // Handle forgot password
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const ForgotPasswordPage()),
+                            );
                           },
-                          child: // Inside LoginPage where Forgot Password button is defined
-                              TextButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const ForgotPasswordPage()),
-                              );
-                            },
-                            child: const Text('Forgot Password?'),
-                          ),
+                          child: const Text('Forgot Password?'),
                         ),
                       ],
                     ),

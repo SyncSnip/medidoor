@@ -24,3 +24,17 @@ class AuthSignUpLoadingState extends AuthState {}
 class AuthSignUpSuccessState extends AuthState {}
 
 class AuthSignUpFailureState extends AuthState {}
+
+class AuthSignUpUserExistState extends AuthState {}
+
+// * auth verify email otp state
+
+class AuthVerifyEmailOtpInitialState extends AuthState {}
+
+class AuthVerifyEmailOtpLoadingState extends AuthState {}
+
+class AuthVerifyEmailOtpSuccessState extends AuthState {}
+
+class AuthVerifyEmailOtpFailureState extends AuthState {}
+
+class AuthUserNotFoundOtpState extends AuthState {}

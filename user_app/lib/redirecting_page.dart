@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:user_app/config/assets/app_images.dart';
 import 'package:user_app/data/model/navigation_bar_model.dart';
-import 'package:user_app/presentation/Profile/pages/profile_page.dart';
+import 'package:user_app/presentation/profile_page/pages/profile_page.dart';
 import 'package:user_app/presentation/cart/pages/cart_page.dart';
 import 'package:user_app/presentation/categories_page/pages/categories_page.dart';
 import 'package:user_app/presentation/homepage/pages/homepage.dart';

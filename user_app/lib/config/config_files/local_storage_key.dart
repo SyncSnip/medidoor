@@ -1,7 +1,9 @@
 class AppKey {
   final String tokenKey = "token";
-  final String standardKey = "standard";
+  final String nameKey = "name";
+  final String emailKey = "email";
 
   String get getTokenKey => tokenKey;
-  String get getStandard => standardKey;
+  String get getNameKey => nameKey;
+  String get getEmailKey => emailKey;
 }

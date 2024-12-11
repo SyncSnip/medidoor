@@ -62,14 +62,14 @@ class _HomepageState extends State<Homepage> {
                             children: [
                               CircleAvatar(
                                 backgroundColor:
-                                    Color.fromARGB(255, 82, 142, 47),
+                                    const Color.fromARGB(255, 82, 142, 47),
                                 radius: 16,
                                 child: Image.asset(AppImages.cart),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: 15,
                               ),
-                              CircleAvatar(
+                              const CircleAvatar(
                                   backgroundColor:
                                       Color.fromARGB(255, 82, 142, 47),
                                   radius: 16,

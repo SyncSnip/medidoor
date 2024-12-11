@@ -1,23 +1,3 @@
-// import 'package:flutter/material.dart';
-// import 'package:google_fonts/google_fonts.dart';
-// // import 'package:learn_blog/core/config/theme/app_color.dart';
-
-// class AppTheme {
-//   static final ThemeData lightTheme = ThemeData(
-//     // primaryColor: AppColors.appWhite,
-//     // scaffoldBackgroundColor: AppColors.appWhite,
-//     brightness: Brightness.light,
-//     // fontFamily: GoogleFonts.handlee().fontFamily,
-//     fontFamily: GoogleFonts.openSans().fontFamily,
-//   );
-//   static final ThemeData darkTheme = ThemeData(
-//     // primaryColor: AppColors.black,
-//     // scaffoldBackgroundColor: AppColors.black,
-//     brightness: Brightness.light,
-//     fontFamily: GoogleFonts.handlee().fontFamily,
-//   );
-// }
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:user_app/config/theme/app_color.dart';
@@ -25,39 +5,39 @@ import 'package:user_app/config/theme/app_color.dart';
 class AppTheme {
   static final ThemeData lightTheme = ThemeData(
     brightness: Brightness.light,
-    primaryColor: AppColors.lightPrimary,
-    scaffoldBackgroundColor: AppColors.lightBackground,
+    primaryColor: AppColors.primary,
+    scaffoldBackgroundColor: AppColors.secondaryLight,
     fontFamily: GoogleFonts.nunito().fontFamily,
     
     colorScheme: const ColorScheme.light(
-      primary: AppColors.lightPrimary,
-      surface: AppColors.lightSurface,
-      onSurface: AppColors.lightText,
+      primary: AppColors.primary,
+      surface: AppColors.secondary,
+      onSurface: AppColors.textPrimary,
     ),
 
     textTheme: TextTheme(
       displayLarge: GoogleFonts.montserrat(
         fontSize: 28,
         fontWeight: FontWeight.bold,
-        color: AppColors.lightText,
+        color: AppColors.textPrimary,
       ),
       titleLarge: GoogleFonts.montserrat(
         fontSize: 20,
         fontWeight: FontWeight.w600,
-        color: AppColors.lightText,
+        color: AppColors.textPrimary,
       ),
       bodyLarge: GoogleFonts.nunito(
         fontSize: 16,
-        color: AppColors.lightText,
+        color: AppColors.textPrimary,
       ),
       bodyMedium: GoogleFonts.nunito(
         fontSize: 14,
-        color: AppColors.lightSecondaryText,
+        color: AppColors.textSecondary,
       ),
     ),
 
     cardTheme: CardTheme(
-      color: AppColors.lightBackground,
+      color: AppColors.secondaryLight,
       elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
     ),
@@ -65,39 +45,39 @@ class AppTheme {
 
   static final ThemeData darkTheme = ThemeData(
     brightness: Brightness.dark,
-    primaryColor: AppColors.darkPrimary,
-    scaffoldBackgroundColor: AppColors.darkBackground,
+    primaryColor: AppColors.primaryDark,
+    scaffoldBackgroundColor: AppColors.black,
     fontFamily: GoogleFonts.nunito().fontFamily,
     
     colorScheme: const ColorScheme.dark(
-      primary: AppColors.darkPrimary,
-      surface: AppColors.darkSurface,
-      onSurface: AppColors.darkText,
+      primary: AppColors.primaryDark,
+      surface: AppColors.secondary,
+      onSurface: AppColors.white,
     ),
 
     textTheme: TextTheme(
       displayLarge: GoogleFonts.montserrat(
         fontSize: 28,
         fontWeight: FontWeight.bold,
-        color: AppColors.darkText,
+        color: AppColors.white,
       ),
       titleLarge: GoogleFonts.montserrat(
         fontSize: 20,
         fontWeight: FontWeight.w600,
-        color: AppColors.darkText,
+        color: AppColors.white,
       ),
       bodyLarge: GoogleFonts.nunito(
         fontSize: 16,
-        color: AppColors.darkText,
+        color: AppColors.white,
       ),
       bodyMedium: GoogleFonts.nunito(
         fontSize: 14,
-        color: AppColors.darkSecondaryText,
+        color: AppColors.textSecondary,
       ),
     ),
 
     cardTheme: CardTheme(
-      color: AppColors.darkSurface,
+      color: AppColors.secondary,
       elevation: 2,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
     ),
