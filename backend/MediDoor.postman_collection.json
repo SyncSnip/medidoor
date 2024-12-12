@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "09ffd5cf-6b58-4be7-9bd2-62fde0a955aa",
+		"_postman_id": "e6f37c7d-510b-46ec-aec0-cfb9197483c9",
 		"name": "MediDoor",
 		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
 		"_exporter_id": "18302498"
@@ -25,7 +25,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Abhishek\",\r\n    \"email\": \"abhishek491981@gmail.com\",\r\n    \"password\": \"123456\"\r\n}\r\n",
+							"raw": "{\r\n    \"name\": \"Abhishek\",\r\n    \"email\": \"t@t.com\",\r\n    \"password\": \"1234\"\r\n}\r\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -94,7 +94,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"otp\": \"438177\"\r\n}",
+							"raw": "{\r\n    \"otp\": \"938550\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -172,6 +172,83 @@
 						"url": "{{baseUrl}}/api/v1/product/all-products"
 					},
 					"response": []
+				},
+				{
+					"name": "add product",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Vick\",\r\n  \"price\": \"65.00\",\r\n  \"description\": \"New description\",\r\n  \"userId\": 13,\r\n  \"quantity\": \"10\",\r\n  \"prodTypeId\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseUrl}}/api/v1/product/add-product"
+					},
+					"response": []
+				},
+				{
+					"name": "get product by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{baseUrl}}/api/v1/product/product/6"
+					},
+					"response": []
+				},
+				{
+					"name": "get product by user id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{baseUrl}}/api/v1/product/all-products/13"
+					},
+					"response": []
+				},
+				{
+					"name": "submit review",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"prodId\": 6,\r\n    \"rating\": 4,\r\n    \"comment\": \"new comment\",\r\n    \"userId\": 9,\r\n    \"prodTypeId\": 1\r\n}\r\n// {\r\n//     \"productId\": \"1\",\r\n//     \"rating\": \"4\",\r\n//     \"comment\": \"Great product!\",\r\n//     \"userId\": \"1\"\r\n// }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseUrl}}/api/v1/product/review"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "product type",
+			"item": [
+				{
+					"name": "add product type",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Vicks\",\r\n    \"description\": \"this is the medicine\",\r\n    \"typeCode\": \"ABC012\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseUrl}}/api/v1/product-type/add-product-type"
+					},
+					"response": []
 				}
 			]
 		},
@@ -179,7 +256,8 @@
 			"name": "test",
 			"request": {
 				"method": "GET",
-				"header": []
+				"header": [],
+				"url": "{{baseUrl}}"
 			},
 			"response": []
 		}

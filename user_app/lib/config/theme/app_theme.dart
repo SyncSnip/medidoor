@@ -8,13 +8,11 @@ class AppTheme {
     primaryColor: AppColors.primary,
     scaffoldBackgroundColor: AppColors.secondaryLight,
     fontFamily: GoogleFonts.nunito().fontFamily,
-    
     colorScheme: const ColorScheme.light(
       primary: AppColors.primary,
       surface: AppColors.secondary,
       onSurface: AppColors.textPrimary,
     ),
-
     textTheme: TextTheme(
       displayLarge: GoogleFonts.montserrat(
         fontSize: 28,
@@ -35,7 +33,6 @@ class AppTheme {
         color: AppColors.textSecondary,
       ),
     ),
-
     cardTheme: CardTheme(
       color: AppColors.secondaryLight,
       elevation: 2,
@@ -48,13 +45,11 @@ class AppTheme {
     primaryColor: AppColors.primaryDark,
     scaffoldBackgroundColor: AppColors.black,
     fontFamily: GoogleFonts.nunito().fontFamily,
-    
     colorScheme: const ColorScheme.dark(
       primary: AppColors.primaryDark,
       surface: AppColors.secondary,
       onSurface: AppColors.white,
     ),
-
     textTheme: TextTheme(
       displayLarge: GoogleFonts.montserrat(
         fontSize: 28,
@@ -75,7 +70,6 @@ class AppTheme {
         color: AppColors.textSecondary,
       ),
     ),
-
     cardTheme: CardTheme(
       color: AppColors.secondary,
       elevation: 2,

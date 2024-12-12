@@ -27,15 +27,17 @@ model User {
 
 model Product {
   prodId      Int         @id @default(autoincrement())
-  price       Decimal     @db.Decimal(10, 2)
-  name        String?
+  name        String
+  price       Float
   description String?
   quantity    String
   userId      Int
   prodTypeId  Int
-  productType ProductType @relation(fields: [prodTypeId], references: [prodTypeId])
-  created_at  DateTime    @default(now())
-  updated_at  DateTime    @default(now())
+  prodType    ProductType @relation(fields: [prodTypeId], references: [prodTypeId])
+  reviews     Review[] // One-to-many relation with Review model
+  Order       Order[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @default(now())
 }
 
 model ProductType {
@@ -43,6 +45,7 @@ model ProductType {
   name        String
   description String
   typeCode    String
+  image       String
   reviews     Review[]
   Product     Product[]
   createdAt   DateTime  @default(now())
@@ -50,26 +53,33 @@ model ProductType {
 }
 
 model Review {
-  id          Int          @id @default(autoincrement())
-  userId      Int
-  prodId      Int
-  content     String
-  rating      Int?
-  ProductType ProductType? @relation(fields: [prodTypeId], references: [prodTypeId])
-  prodTypeId  Int?
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @default(now())
+  id         Int         @id @default(autoincrement())
+  rating     Int         @default(0)
+  comment    String?
+  prodId     Int
+  userId     Int
+  product    Product     @relation(fields: [prodId], references: [prodId])
+  prodType   ProductType @relation(fields: [prodTypeId], references: [prodTypeId])
+  prodTypeId Int
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
 }
 
 model Payment {
-  paymentId Int    @id @unique @default(autoincrement())
+  paymentId Int      @id @unique @default(autoincrement())
   userId    Int
   amount    BigInt
   method    String
   status    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
 }
 
 model Order {
-  orderId Int @unique @default(autoincrement())
-  userId  Int
+  orderId   Int      @unique @default(autoincrement())
+  userId    Int
+  prodId    Int
+  product   Product  @relation(fields: [prodId], references: [prodId])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
 }
