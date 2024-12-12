@@ -25,22 +25,26 @@ const addProduct = asyncHandler(async (req, res) => {
       quantity,
     } = req.body;
 
+    console.log(req.body);
+
     const product = await prisma.product.create({
-
+      data: {
+        name,
+        price,
+        description,
+        userId,
+        quantity,
+      }
     });
+
+    return res.status(201).json({ status: 201, message: "Product sucessfully added", data: product });
   } catch (err) {
 
   }
 });
 
-const addProductType = asyncHandler(async (req, res) => {
-  try {
-
-  } catch (err) {
-
-  }
-});
 
 module.exports = {
   getAllProducts,
+  addProduct,
 };

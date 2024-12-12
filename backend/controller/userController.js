@@ -81,10 +81,10 @@ const verifyUser = asyncHandler(async (req, res) => {
       },
     });
 
-    const { password: _, ...userWithoutPassword } = user;
+    const { password: _, otp: _otp, isAdmin: _isAdmin, isVerified: _isVerified, ...userWithoutPassword } = user;
     await sendEmail(email, verificationDoneSubject(), verificationDoneBody(user.name));
 
-    return res.status(200).json({ status: 200, message: "User verified successfully", data: verifiedUser });
+    return res.status(200).json({ status: 200, message: "User verified successfully", data: userWithoutPassword });
   } catch (err) {
     return res.json({ status: 500, data: "Internal server error", message: err.message });
   }

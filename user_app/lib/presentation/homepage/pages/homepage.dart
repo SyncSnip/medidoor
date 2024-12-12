@@ -55,29 +55,30 @@ class _HomepageState extends State<Homepage> {
                         ),
                       ),
                       SizedBox(
-                          width: 100,
-                          height: 50,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              CircleAvatar(
-                                backgroundColor:
-                                    const Color.fromARGB(255, 82, 142, 47),
-                                radius: 16,
-                                child: Image.asset(AppImages.cart),
+                        width: 100,
+                        height: 50,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            CircleAvatar(
+                              backgroundColor:
+                                  const Color.fromARGB(255, 82, 142, 47),
+                              radius: 16,
+                              child: Image.asset(AppImages.cart),
+                            ),
+                            const SizedBox(
+                              width: 15,
+                            ),
+                            const CircleAvatar(
+                              backgroundColor: Color.fromARGB(255, 82, 142, 47),
+                              radius: 16,
+                              child: Icon(
+                                Icons.notifications,
                               ),
-                              const SizedBox(
-                                width: 15,
-                              ),
-                              const CircleAvatar(
-                                  backgroundColor:
-                                      Color.fromARGB(255, 82, 142, 47),
-                                  radius: 16,
-                                  child: Icon(
-                                    Icons.notifications,
-                                  )),
-                            ],
-                          )),
+                            ),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),
