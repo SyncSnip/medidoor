@@ -94,9 +94,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const OtpVerificationPage(
-                            isSignUp: false,
-                          ),
+                          builder: (context) => const OtpVerificationPage(),
                         ),
                       );
                     }

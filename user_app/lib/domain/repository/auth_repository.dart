@@ -65,6 +65,8 @@ class AuthRepository {
           ApiOperations.post, AuthEndpoints.verifyEmail,
           json: {"otp": otp});
 
+      log('api res: ${response.body}');
+
       return response.statusCode;
     } catch (e) {
       log(e.toString());

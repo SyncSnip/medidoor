@@ -38,3 +38,5 @@ class AuthVerifyEmailOtpEvent extends AuthEvent {
 
   AuthVerifyEmailOtpEvent({required this.otp});
 }
+
+class AuthVerifyEmailOtpNormalEvent extends AuthEvent {}

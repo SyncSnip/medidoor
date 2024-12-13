@@ -16,6 +16,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthSignUpEvent>(authSignUpEvent);
     on<AuthSignUpNormalEvent>(authSignUpNormalEvent);
     on<AuthVerifyEmailOtpEvent>(authVerifyEmailOtpEvent);
+    on<AuthVerifyEmailOtpNormalEvent>(authVerifyEmailOtpNormalEvent);
   }
 
   FutureOr<void> authSignInEvent(
@@ -102,6 +103,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       AuthSignInNormalEvent event, Emitter<AuthState> emit) async {
     try {
       emit(AuthSignInInitialState());
+    } catch (err) {
+      return;
+    }
+  }
+
+  FutureOr<void> authVerifyEmailOtpNormalEvent(
+      AuthVerifyEmailOtpNormalEvent event, Emitter<AuthState> emit) async {
+    try {
+      emit(AuthVerifyEmailOtpInitialState());
+      return;
     } catch (err) {
       return;
     }

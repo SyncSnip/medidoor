@@ -36,7 +36,7 @@ class _SignupPageState extends State<SignupPage> {
         bloc: _authBloc,
         listener: (context, state) {
           if (state is AuthSignUpSuccessState) {
-            context.pushReplacement(const OtpVerificationPage(isSignUp: false));
+            context.pushReplacement(const OtpVerificationPage());
           } else if (state is AuthSignUpUserExistState) {
             const snackBar = SnackBar(
               content: Text('User is already exists'),

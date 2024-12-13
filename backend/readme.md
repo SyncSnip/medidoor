@@ -15,6 +15,7 @@ Medidoor is a powerful backend API built with Node.js, Express, and Prisma. It p
   - [Response Codes](#response-codes)
   - [Apply database migrations:](#apply-database-migrations)
   - [Apply any changes in database:](#apply-any-changes-in-database)
+  - [Run Backend](#run-backend)
 
 ## Features
 
@@ -37,3 +38,6 @@ Medidoor is a powerful backend API built with Node.js, Express, and Prisma. It p
 
 ## Apply any changes in database:
 `npx prisma migrate dev --name make_isVerified_required`
+
+## Run Backend
+`nodemon server.js`
