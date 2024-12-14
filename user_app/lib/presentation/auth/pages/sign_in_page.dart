@@ -24,6 +24,12 @@ class _SignInPageState extends State<SignInPage> {
   bool _checkBox = false;
 
   @override
+  void initState() {
+    super.initState();
+    _authBloc.add(AuthSignInNormalEvent());
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocConsumer<AuthBloc, AuthState>(
@@ -36,6 +42,15 @@ class _SignInPageState extends State<SignInPage> {
             const snackBar = SnackBar(
               content: Text('You are not a verified user'),
             );
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+            _authBloc.add(AuthSignInNormalEvent());
+            return;
+          } else if (state is AuthSignInFailureState) {
+            const snackBar = SnackBar(
+              content: Text('Invalid credentials'),
+            );
+            _passController.clear();
             ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
             _authBloc.add(AuthSignInNormalEvent());
@@ -180,7 +195,7 @@ class _SignInPageState extends State<SignInPage> {
               ),
             );
           }
-          return const SomethingWentWrong();
+          return const Loading();
         },
       ),
     );
