@@ -6,10 +6,10 @@ import 'package:user_app/common/pages/no_internet_page.dart';
 import 'package:user_app/config/config_files/local_storage_key.dart';
 import 'package:user_app/config/extensions/extensions.dart';
 import 'package:user_app/config/theme/app_color.dart';
+import 'package:user_app/config/utils/internet_connectivity.dart';
 import 'package:user_app/data/sources/auth_source.dart';
 import 'package:user_app/presentation/auth/pages/sign_in_page.dart';
 import 'package:user_app/redirecting_page.dart';
-import 'package:user_app/config/utils/internet_connectivity.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

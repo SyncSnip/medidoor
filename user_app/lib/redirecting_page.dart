@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:user_app/data/model/navigation_bar_model.dart';
-import 'package:user_app/presentation/profile_page/pages/profile_page.dart';
 import 'package:user_app/presentation/cart/pages/cart_page.dart';
 import 'package:user_app/presentation/categories_page/pages/categories_page.dart';
 import 'package:user_app/presentation/homepage/pages/homepage.dart';
+import 'package:user_app/presentation/profile_page/pages/profile_page.dart';
 
 class RedirectingPage extends StatefulWidget {
   const RedirectingPage({super.key});
@@ -28,8 +28,8 @@ class _RedirectingPageState extends State<RedirectingPage> {
     ),
     NavigationItem(
       label: 'Consultation',
-      icon: Icons.add_ic_call_outlined,
-      selectedIcon: Icons.add_ic_call_outlined,
+      icon: Icons.shopping_cart_outlined,
+      selectedIcon: Icons.shopping_cart,
       page: const CartPage(),
     ),
     NavigationItem(
@@ -56,8 +56,8 @@ class _RedirectingPageState extends State<RedirectingPage> {
         child: Container(
           height: 55,
           decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey, width: 1.2),
-            color: const Color.fromARGB(255, 48, 226, 101),
+            border: Border.all(color: Colors.grey[300]!, width: 1.2),
+            color: Colors.white,
             borderRadius: BorderRadius.circular(45),
             boxShadow: [
               BoxShadow(
@@ -86,29 +86,24 @@ class _RedirectingPageState extends State<RedirectingPage> {
 
     return InkWell(
       onTap: () => setState(() => _selectedIndex = index),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              isSelected ? item.selectedIcon : item.icon,
-              color: isSelected ? Theme.of(context).primaryColor : Colors.grey,
-            ),
-            const SizedBox(height: 4),
-            if (index == _selectedIndex)
-              Text(
-                item.label,
-                style: TextStyle(
-                  fontSize: 12,
-                  color:
-                      isSelected ? Theme.of(context).primaryColor : Colors.grey,
-                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-                ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            isSelected ? item.selectedIcon : item.icon,
+            color: isSelected ? Colors.black : Colors.grey,
+          ),
+          const SizedBox(height: 4),
+          if (index == _selectedIndex)
+            Text(
+              item.label,
+              style: TextStyle(
+                fontSize: 12,
+                color: isSelected ? Colors.black : Colors.grey,
+                fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
               ),
-          ],
-        ),
+            ),
+        ],
       ),
     );
   }

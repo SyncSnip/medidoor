@@ -66,6 +66,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(),
       body: BlocConsumer<AuthBloc, AuthState>(
