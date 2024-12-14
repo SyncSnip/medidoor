@@ -76,6 +76,7 @@ class _SignInPageState extends State<SignInPage> {
                     ),
                     10.ah,
                     TextFormField(
+                      obscureText: true,
                       controller: _passController,
                       decoration: InputDecoration(
                         labelText: 'Enter Password',
@@ -83,7 +84,7 @@ class _SignInPageState extends State<SignInPage> {
                           borderRadius: BorderRadius.circular(8),
                         ),
                       ),
-                      keyboardType: TextInputType.visiblePassword,
+                      // keyboardType: TextInputType.visiblePassword,
                     ),
                     10.ah,
                     Row(
@@ -120,7 +121,7 @@ class _SignInPageState extends State<SignInPage> {
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
                             _authBloc.add(AuthSignInEvent(
-                                email: _emailController.text,
+                                email: _emailController.text.toLowerCase(),
                                 password: _passController.text));
                           }
                         },
@@ -129,7 +130,14 @@ class _SignInPageState extends State<SignInPage> {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 50, vertical: 15),
                         ),
-                        child: const Text('Login'),
+                        child: const Text(
+                          'Login',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              fontFamily: 'Poppins'),
+                        ),
                       ),
                     ),
                     const SizedBox(height: 20),

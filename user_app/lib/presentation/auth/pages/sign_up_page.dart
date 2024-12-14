@@ -1,8 +1,11 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:user_app/common/widgets/loading.dart';
 import 'package:user_app/config/extensions/extensions.dart';
 import 'package:user_app/presentation/auth/bloc/auth_bloc.dart';
-import 'package:user_app/presentation/auth/pages/otp_screen.dart';
+import 'package:user_app/presentation/auth/pages/otp_screen_sign_up.dart';
 import 'package:user_app/presentation/auth/pages/sign_in_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -19,6 +22,7 @@ class _SignupPageState extends State<SignupPage> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
+  bool _isPasswordVisible = true;
   bool _isPasswordValid = true;
 
   void _validatePassword(String value) {
@@ -36,7 +40,8 @@ class _SignupPageState extends State<SignupPage> {
         bloc: _authBloc,
         listener: (context, state) {
           if (state is AuthSignUpSuccessState) {
-            context.pushReplacement(const OtpVerificationPage());
+            log('going to otp page');
+            context.push(const OtpVerificationPage());
           } else if (state is AuthSignUpUserExistState) {
             const snackBar = SnackBar(
               content: Text('User is already exists'),
@@ -87,7 +92,10 @@ class _SignupPageState extends State<SignupPage> {
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
-                    keyboardType: TextInputType.phone,
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                    ],
                   ),
                   const SizedBox(height: 10),
                   TextFormField(
@@ -104,6 +112,16 @@ class _SignupPageState extends State<SignupPage> {
                   TextFormField(
                     controller: _passwordController,
                     decoration: InputDecoration(
+                      suffixIcon: InkWell(
+                        onTap: () {
+                          setState(() {
+                            _isPasswordVisible = !_isPasswordVisible;
+                          });
+                        },
+                        child: Icon(_isPasswordVisible
+                            ? Icons.visibility
+                            : Icons.visibility_off),
+                      ),
                       labelText: 'Set Password',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
@@ -112,7 +130,7 @@ class _SignupPageState extends State<SignupPage> {
                           ? null
                           : 'Must be 8 or more characters and contain at least 1 number\n and 1 special character.',
                     ),
-                    obscureText: true,
+                    obscureText: _isPasswordVisible,
                     onChanged: _validatePassword,
                   ),
                   const SizedBox(height: 10),
@@ -129,7 +147,7 @@ class _SignupPageState extends State<SignupPage> {
                         // context.push(const RedirectingPage());
                         // if (_formKey.currentState!.validate()) {
                         _authBloc.add(AuthSignUpEvent(
-                            email: _emailController.text,
+                            email: _emailController.text.toLowerCase(),
                             password: _passwordController.text,
                             name: _nameController.text));
                         // }

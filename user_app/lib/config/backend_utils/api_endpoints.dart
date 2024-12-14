@@ -2,7 +2,7 @@ class AuthEndpoints {
   // Auth Endpoints
   static const String signIn = "user/signin";
   static const String signUp = "user/signup";
-  static const String verifyEmail = "user/verify-email";
+  static const String verifyEmail = "user/verify-user";
   static const String forgotPassword = "user/forgot-password";
   static const String resetPassword = "user/reset-password";
 

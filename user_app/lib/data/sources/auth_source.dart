@@ -1,7 +1,11 @@
 class AuthSource {
+  static final AuthSource _instance = AuthSource._internal();
+  factory AuthSource() => _instance;
+  AuthSource._internal();
+
   String? _token;
   String? _name;
-  String? _email;
+  String? _email; 
   String? _phone;
 
   String? get getToken => _token;

@@ -1,7 +1,10 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:user_app/common/pages/something_went_wrong.dart';
+import 'package:user_app/common/ui_functions/ui_functions.dart';
 import 'package:user_app/common/widgets/loading.dart';
 import 'package:user_app/config/extensions/extensions.dart';
 import 'package:user_app/presentation/auth/bloc/auth_bloc.dart';
@@ -55,8 +58,16 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+
+    _authBloc.add(AuthVerifyEmailOtpNormalEvent());
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(),
       body: BlocConsumer<AuthBloc, AuthState>(
         bloc: _authBloc,
         listener: (context, state) {
@@ -65,50 +76,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
           } else if (state is AuthVerifyEmailOtpFailureState) {
             context.push(const SomethingWentWrong());
           } else if (state is AuthUserNotFoundOtpState) {
-            showDialog(
-              context: context,
-              builder: (_) => AlertDialog(
-                title: const Text(
-                  'User Not Found',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.red,
-                  ),
-                ),
-                content: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      Icons.error_outline,
-                      size: 60,
-                      color: Colors.red[300],
-                    ),
-                    const SizedBox(height: 16),
-                    const Text(
-                      'We could not find any user with the provided details.',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 16),
-                    ),
-                  ],
-                ),
-                actions: [
-                  TextButton(
-                    onPressed: () => Navigator.pop(_),
-                    child: const Text(
-                      'OK',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.green,
-                      ),
-                    ),
-                  ),
-                ],
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15),
-                ),
-              ),
-            );
+            errorPopup(ctx: context, head: 'User Not Found');
 
             _authBloc.add(AuthVerifyEmailOtpNormalEvent());
           }
@@ -161,40 +129,38 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                     ),
                   ),
                   const SizedBox(height: 30),
-                  const Text(
-                    'An OTP is sent to the entered Mobile number.',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.grey,
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: List.generate(
-                      6,
-                      (index) => _buildOTPField(
-                        _mobileOtpControllers[index],
-                        _mobileFocusNodes[index],
-                        index,
-                        false,
-                      ),
-                    ),
-                  ),
+                  // const Text(
+                  //   'An OTP is sent to the entered Mobile number.',
+                  //   style: TextStyle(
+                  //     fontSize: 16,
+                  //     color: Colors.grey,
+                  //   ),
+                  // ),
+                  // const SizedBox(height: 20),
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  //   children: List.generate(
+                  //     6,
+                  //     (index) => _buildOTPField(
+                  //       _mobileOtpControllers[index],
+                  //       _mobileFocusNodes[index],
+                  //       index,
+                  //       false,
+                  //     ),
+                  //   ),
+                  // ),
                   const SizedBox(height: 40),
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: () {
-                        // Validate and process OTP
-                        String emailOtp = _emailOtpControllers
-                            .map((controller) => controller.text)
-                            .join();
-                        String mobileOtp = _mobileOtpControllers
+                        otp = _emailOtpControllers
                             .map((controller) => controller.text)
                             .join();
 
-                        if (emailOtp.length == 6 && mobileOtp.length == 6) {
+                        log(otp);
+
+                        if (otp.length == 6) {
                           _authBloc.add(AuthVerifyEmailOtpEvent(otp: otp));
                         }
                       },
@@ -210,6 +176,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
+                          color: Colors.white,
                         ),
                       ),
                     ),
@@ -218,7 +185,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
               ),
             );
           }
-          return const SizedBox.shrink(); // Default return
+          return const SizedBox.shrink();
         },
       ),
     );

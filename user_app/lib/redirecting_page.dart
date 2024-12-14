@@ -1,7 +1,4 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:user_app/config/assets/app_images.dart';
 import 'package:user_app/data/model/navigation_bar_model.dart';
 import 'package:user_app/presentation/profile_page/pages/profile_page.dart';
 import 'package:user_app/presentation/cart/pages/cart_page.dart';
@@ -48,7 +45,6 @@ class _RedirectingPageState extends State<RedirectingPage> {
   @override
   void initState() {
     super.initState();
-    log(AppImages.diabetes);
   }
 
   @override
@@ -93,12 +89,6 @@ class _RedirectingPageState extends State<RedirectingPage> {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
-        // decoration: BoxDecoration(
-        //   color: isSelected
-        //       ? Theme.of(context).primaryColor.withOpacity(0.1)
-        //       : Colors.transparent,
-        //   borderRadius: BorderRadius.circular(50),
-        // ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
