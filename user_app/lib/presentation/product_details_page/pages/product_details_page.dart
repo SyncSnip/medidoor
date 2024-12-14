@@ -14,7 +14,9 @@ class ProductDetailsPage extends StatefulWidget {
   State<ProductDetailsPage> createState() => _ProductDetailsPageState();
 }
 
-class _ProductDetailsPageState extends State<ProductDetailsPage> with SingleTickerProviderStateMixin {
+class _ProductDetailsPageState extends State<ProductDetailsPage>
+    with SingleTickerProviderStateMixin {
+  bool isAddedToCart = false;
   int quantity = 1;
   bool isFavorite = false;
   late AnimationController _controller;
@@ -91,8 +93,8 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> with SingleTick
             // Product Image
             Center(
               child: Container(
-                height: 200,
-                width: 200,
+                height: 250,
+                width: 250,
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     image:
@@ -112,7 +114,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> with SingleTick
                   Text(
                     widget.productModel.name,
                     style: const TextStyle(
-                      fontSize: 20,
+                      fontSize: 22,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -124,6 +126,17 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> with SingleTick
                         style: const TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
+                          decoration: TextDecoration.lineThrough,
+                          color: Colors.grey,
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      const Text(
+                        '₹105',
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.green,
                         ),
                       ),
                       const SizedBox(width: 8),
@@ -146,31 +159,99 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> with SingleTick
                       ),
                     ],
                   ),
-
-                  // Delivery Info
-                  const SizedBox(height: 16),
-                  Row(
+                  const SizedBox(height: 8),
+                  const Row(
                     children: [
-                      _buildInfoBox('Delivery in', '15 mins'),
-                      const SizedBox(width: 16),
-                      _buildInfoBox('Quantity', widget.productModel.quantity),
+                      Icon(Icons.star, color: Colors.green, size: 16),
+                      SizedBox(width: 4),
+                      Text(
+                        '4.5',
+                        style: TextStyle(
+                          color: Colors.green,
+                          fontSize: 14,
+                        ),
+                      ),
+                      SizedBox(width: 4),
+                      Text(
+                        '35 ratings',
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 14,
+                        ),
+                      ),
                     ],
                   ),
-
-                  // Description
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 8),
                   Text(
-                    widget.productModel.description,
+                    'Vicks Vaporub 100ml, Relief From Cold, Cough, Blocked Nose, Headache, Body ache, Muscular stiffness and Breathing difficulty',
                     style: TextStyle(color: Colors.grey.shade700),
                   ),
+                ],
+              ),
+            ),
 
-                  // Payment & Returns Section
-                  const SizedBox(height: 24),
-                  _buildPaymentReturnsSection(),
+            // Delivery Info
+            const SizedBox(height: 16),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _buildInfoBox('Delivery in', '15 mins'),
+                const SizedBox(width: 16),
+                _buildInfoBox(
+                    'Quantity', widget.productModel.quantity.toString()),
+              ],
+            ),
 
-                  // Reviews Section
-                  const SizedBox(height: 24),
-                  _buildReviewsSection(),
+            // Payment & Returns Section
+            const SizedBox(height: 24),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: _buildPaymentReturnsSection(),
+            ),
+
+            // Reviews Section
+            const SizedBox(height: 24),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: _buildReviewsSection(),
+            ),
+
+            // Similar Products Section
+            const SizedBox(height: 24),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Similar products',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  _buildProductList(),
+                ],
+              ),
+            ),
+
+            // Trending Products Section
+            const SizedBox(height: 24),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Trending products',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  _buildProductList(),
                 ],
               ),
             ),
@@ -183,17 +264,36 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> with SingleTick
 
   Widget _buildInfoBox(String title, String value) {
     return Container(
+      width: 180,
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey.shade300),
+        color: const Color(0xFFC9EBAE),
         borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: Colors.green),
       ),
-      child: Column(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(title),
-          Text(
-            value,
-            style: const TextStyle(fontWeight: FontWeight.bold),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: const TextStyle(color: Colors.grey, fontSize: 12),
+              ),
+              Text(
+                value,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                  fontSize: 16,
+                ),
+              ),
+            ],
+          ),
+          const Icon(
+            Icons.chevron_right,
+            color: Colors.green,
           ),
         ],
       ),
@@ -202,40 +302,67 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> with SingleTick
 
   Widget _buildPaymentReturnsSection() {
     return Container(
-      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.blue.shade50,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(20),
+        gradient: LinearGradient(
+          colors: [Colors.blue.shade200, Colors.white],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        ),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Payment, Returns & Expiry',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Payment, Returns & Expiry',
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-          ),
-          const SizedBox(height: 16),
-          _buildInfoRow(
-            Icons.money,
-            'Cash on delivery available',
-            'Get your product first, then pay us once you\'re sure about your order',
-          ),
-          const SizedBox(height: 16),
-          _buildInfoRow(
-            Icons.refresh,
-            '7 day free return',
-            'Easily return the product if you don\'t need it anymore',
-          ),
-          const SizedBox(height: 16),
-          _buildInfoRow(
-            Icons.access_time,
-            'Product expires after Apr, 2026',
-            'We only stock items that keep their quality over time',
-          ),
-        ],
+            const SizedBox(height: 16),
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.2),
+                    spreadRadius: 2,
+                    blurRadius: 5,
+                    offset: const Offset(0, 3),
+                  ),
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildInfoRow(
+                    Icons.money,
+                    'Cash on delivery available',
+                    'Get your product first, then pay us once you\'re sure about your order',
+                  ),
+                  const SizedBox(height: 16),
+                  _buildInfoRow(
+                    Icons.refresh,
+                    '7 day free return',
+                    'Easily return the product if you don\'t need it anymore',
+                  ),
+                  const SizedBox(height: 16),
+                  _buildInfoRow(
+                    Icons.access_time,
+                    'Product expires after Apr, 2026',
+                    'We only stock items that keep their quality over time',
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -251,7 +378,8 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> with SingleTick
             children: [
               Text(
                 title,
-                style: const TextStyle(fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                    color: Colors.black, fontWeight: FontWeight.bold),
               ),
               Text(
                 subtitle,
@@ -280,7 +408,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> with SingleTick
         ),
         const SizedBox(height: 16),
         ListView.separated(
-            separatorBuilder: (context, index) => 8.ah,
+            separatorBuilder: (context, index) => const SizedBox(height: 8),
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             itemCount: widget.productModel.prodType.reviews.length,
@@ -348,6 +476,67 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> with SingleTick
     );
   }
 
+  Widget _buildProductList() {
+    return SizedBox(
+      height: 150,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: 5, // Example count
+        itemBuilder: (context, index) {
+          return Container(
+            width: 120,
+            margin: const EdgeInsets.only(right: 16),
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.grey.shade300),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      image: DecorationImage(
+                        image: NetworkImage(
+                            'https://via.placeholder.com/150'), // Example image
+                        fit: BoxFit.cover,
+                      ),
+                      borderRadius:
+                          BorderRadius.vertical(top: Radius.circular(8)),
+                    ),
+                  ),
+                ),
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Product Name',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 4),
+                      Text(
+                        '₹105',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.green,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+
   Widget _buildBottomBar() {
     return Container(
       padding: const EdgeInsets.all(16),
@@ -361,64 +550,72 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> with SingleTick
           ),
         ],
       ),
-      child: Row(
-        children: [
-          StatefulBuilder(builder: (context, setState) {
-            return Container(
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.grey.shade300),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Row(
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.remove),
-                    onPressed: () {
-                      if (quantity > 1) {
-                        setState(() {
-                          quantity--;
-                        });
-                      }
-                    },
-                  ),
-                  Text('$quantity'),
-                  IconButton(
-                    icon: const Icon(Icons.add),
-                    onPressed: () {
-                      setState(() {
-                        quantity++;
-                      });
-                    },
-                  ),
-                ],
-              ),
-            );
-          }),
-          const SizedBox(width: 16),
-          Expanded(
-            child: ElevatedButton(
-              onPressed: () {
-                context.push(const CheckoutPage());
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green,
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(
+      child: StatefulBuilder(builder: (context, setState) {
+        return Row(
+          children: [
+            if (isAddedToCart)
+              Container(
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey.shade300),
                   borderRadius: BorderRadius.circular(8),
                 ),
+                child: Row(
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.remove),
+                      onPressed: () {
+                        if (quantity > 1) {
+                          setState(() {
+                            quantity--;
+                          });
+                        }
+                      },
+                    ),
+                    Text('$quantity'),
+                    IconButton(
+                      icon: const Icon(Icons.add),
+                      onPressed: () {
+                        setState(() {
+                          quantity++;
+                        });
+                      },
+                    ),
+                  ],
+                ),
               ),
-              child: const Text(
-                'Go to cart',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.white,
+            const SizedBox(width: 16),
+            Expanded(
+              child: ElevatedButton(
+                onPressed: () {
+                  if (!isAddedToCart) {
+                    setState(() {
+                      isAddedToCart = true;
+                    });
+                  } else {
+                    context.push(const CheckoutPage());
+                  }
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor:
+                      isAddedToCart ? Colors.green : Colors.lightGreen,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                child: Text(
+                  isAddedToCart ? 'Go to cart' : 'Add to cart',
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
-      ),
+          ],
+        );
+      }),
     );
   }
 }

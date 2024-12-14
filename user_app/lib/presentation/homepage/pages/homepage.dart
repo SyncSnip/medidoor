@@ -61,11 +61,15 @@ class _HomepageState extends State<Homepage> {
                               height: 50,
                               child: Row(
                                 children: [
-                                  const CircleAvatar(
+                                  CircleAvatar(
                                     backgroundColor:
-                                        Color.fromARGB(255, 82, 142, 47),
+                                        const Color.fromARGB(255, 82, 142, 47),
                                     radius: 16,
-                                    child: Icon(Icons.location_on_outlined),
+                                    child: Image.asset(
+                                      'assets/icons/location.png',
+                                      color: Colors.white,
+                                      width: 20,
+                                    ),
                                   ),
                                   10.aw,
                                   const Text(
@@ -86,17 +90,22 @@ class _HomepageState extends State<Homepage> {
                                     backgroundColor:
                                         const Color.fromARGB(255, 82, 142, 47),
                                     radius: 16,
-                                    child: Image.asset(AppImages.cart),
+                                    child: Image.asset(
+                                      AppImages.cart,
+                                      width: 14,
+                                    ),
                                   ),
                                   const SizedBox(
                                     width: 15,
                                   ),
-                                  const CircleAvatar(
+                                  CircleAvatar(
                                     backgroundColor:
-                                        Color.fromARGB(255, 82, 142, 47),
+                                        const Color.fromARGB(255, 82, 142, 47),
                                     radius: 16,
-                                    child: Icon(
-                                      Icons.notifications,
+                                    child: Image.asset(
+                                      'assets/icons/notibell.png',
+                                      color: Colors.white,
+                                      width: 20,
                                     ),
                                   ),
                                 ],
@@ -247,47 +256,87 @@ class _HomepageState extends State<Homepage> {
                               crossAxisCount: 4,
                               mainAxisSpacing: 8,
                               crossAxisSpacing: 8,
-                              children: List.generate(8, (index) {
-                                return Container(
-                                  color: Colors.grey[200],
-                                  child:
-                                      Center(child: Text('Item ${index + 1}')),
-                                );
-                              }),
+                              children: [
+                                _buildCategoryCard(
+                                    AppImages.diabetes, 'Diabetes'),
+                                _buildCategoryCard(
+                                    'assets/images/stomach-health.png',
+                                    'Stomach health'),
+                                _buildCategoryCard(
+                                    'assets/images/pain-injury.png',
+                                    'Pain & injury'),
+                                _buildCategoryCard(
+                                    'assets/images/eye-health.png',
+                                    'Eye Health'),
+                                _buildCategoryCard(
+                                    'assets/images/cough-cold.png',
+                                    'Cough & Cold'),
+                                _buildCategoryCard('assets/images/image 10.png',
+                                    'Skin health'),
+                                _buildCategoryCard(
+                                    'assets/images/first-aid.png', 'First aid'),
+                                _buildCategoryCard('assets/images/immunity.png',
+                                    'Immunity boost'),
+                              ],
                             ),
                             const SizedBox(height: 24),
                             Container(
                               padding: const EdgeInsets.all(16),
                               decoration: BoxDecoration(
-                                color: Colors.blue[50],
                                 borderRadius: BorderRadius.circular(12),
+                                color: const Color.fromARGB(255, 174, 222, 238),
                               ),
                               child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      const Text(
-                                        'Want to consult a doctor ?',
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Want to consult a doctor\nbefore buying medicines?',
+                                          style: GoogleFonts.sourceSans3(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.black,
+                                          ),
                                         ),
-                                      ),
-                                      const SizedBox(height: 8),
-                                      const Text(
-                                        'Book a 1-on-1 session with our doctors.',
-                                        style: TextStyle(fontSize: 14),
-                                      ),
-                                      const SizedBox(height: 10),
-                                      ElevatedButton(
-                                        onPressed: () {},
-                                        child: const Text('Book Now'),
-                                      ),
-                                    ],
+                                        const SizedBox(height: 8),
+                                        Text(
+                                          'Book a 1-on-1 session with our doctors.',
+                                          style: GoogleFonts.sourceSans3(
+                                            fontSize: 14,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 10),
+                                        GestureDetector(
+                                          onTap: () {},
+                                          child: Container(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 6, horizontal: 12),
+                                            decoration: BoxDecoration(
+                                              color: Colors.green,
+                                              borderRadius:
+                                                  BorderRadius.circular(20),
+                                            ),
+                                            child: const Text(
+                                              'Book Now',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  const SizedBox(width: 16),
+                                  Image.asset(
+                                    'assets/images/banner-2-mid.png',
+                                    height: 90,
+                                    fit: BoxFit.cover,
                                   ),
                                 ],
                               ),
@@ -297,6 +346,7 @@ class _HomepageState extends State<Homepage> {
                               'Personal Care',
                               style: TextStyle(
                                 fontSize: 20,
+                                color: Colors.black,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -307,13 +357,28 @@ class _HomepageState extends State<Homepage> {
                               crossAxisCount: 4,
                               mainAxisSpacing: 8,
                               crossAxisSpacing: 8,
-                              children: List.generate(8, (index) {
-                                return Container(
-                                  color: Colors.grey[200],
-                                  child:
-                                      Center(child: Text('Item ${index + 1}')),
-                                );
-                              }),
+                              children: [
+                                _buildCategoryCard(
+                                    AppImages.diabetes, 'Diabetes'),
+                                _buildCategoryCard(
+                                    'assets/images/stomach-health.png',
+                                    'Stomach health'),
+                                _buildCategoryCard(
+                                    'assets/images/pain-injury.png',
+                                    'Pain & injury'),
+                                _buildCategoryCard(
+                                    'assets/images/eye-health.png',
+                                    'Eye Health'),
+                                _buildCategoryCard(
+                                    'assets/images/cough-cold.png',
+                                    'Cough & Cold'),
+                                _buildCategoryCard('assets/images/image 10.png',
+                                    'Skin health'),
+                                _buildCategoryCard(
+                                    'assets/images/first-aid.png', 'First aid'),
+                                _buildCategoryCard('assets/images/immunity.png',
+                                    'Immunity boost'),
+                              ],
                             ),
                           ],
                         ),
@@ -554,5 +619,61 @@ class _HomepageState extends State<Homepage> {
           dotHeight: 8,
           dotWidth: 8,
         ));
+  }
+
+  Widget _buildCategoryCard(String imagePath, String title) {
+    return Column(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            gradient: const LinearGradient(
+              colors: [
+                Color.fromARGB(255, 121, 170, 235),
+                Color.fromARGB(255, 112, 184, 194),
+                Color.fromARGB(255, 106, 197, 152),
+                Color.fromARGB(255, 130, 192, 142),
+                Color.fromARGB(255, 153, 188, 133)
+              ],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            ),
+            borderRadius: BorderRadius.circular(8),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.2),
+                spreadRadius: 2,
+                blurRadius: 5,
+                offset: const Offset(0, 3),
+              ),
+            ],
+          ),
+          child: Column(
+            children: [
+              Stack(
+                alignment: Alignment.center,
+                children: [
+                  Image.asset(
+                    imagePath,
+                    height: 40,
+                    width: 40,
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          title,
+          textAlign: TextAlign.center,
+          style: GoogleFonts.sourceSans3(
+            fontSize: 12,
+            fontWeight: FontWeight.w600,
+            color: Colors.black,
+          ),
+        ),
+      ],
+    );
   }
 }

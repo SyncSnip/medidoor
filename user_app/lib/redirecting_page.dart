@@ -27,7 +27,7 @@ class _RedirectingPageState extends State<RedirectingPage> {
       page: const CategoriesPage(),
     ),
     NavigationItem(
-      label: 'Consultation',
+      label: 'Your Cart',
       icon: Icons.shopping_cart_outlined,
       selectedIcon: Icons.shopping_cart,
       page: const CartPage(),

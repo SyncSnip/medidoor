@@ -110,7 +110,13 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              child: const Text('Track Order'),
+              child: const Text(
+                'Track Order',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontFamily: 'GoogleFonts.sourceSans3',
+                ),
+              ),
             ),
           ],
         ),

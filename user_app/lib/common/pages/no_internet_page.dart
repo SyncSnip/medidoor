@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:user_app/config/extensions/extensions.dart';
-import 'package:user_app/config/utils/internet_connectivity.dart';
 import 'package:user_app/config/theme/app_color.dart';
+import 'package:user_app/config/utils/internet_connectivity.dart';
 
 class NoInternetPage extends StatefulWidget {
   final Widget? previousRoute;
@@ -37,7 +37,8 @@ class _NoInternetPageState extends State<NoInternetPage>
       _isChecking = true;
     });
 
-    final bool isConnected = await InternetConnectivityManager.checkConnection();
+    final bool isConnected =
+        await InternetConnectivityManager.checkConnection();
 
     if (mounted) {
       setState(() {
@@ -77,6 +78,7 @@ class _NoInternetPageState extends State<NoInternetPage>
       },
       child: Scaffold(
         body: Container(
+          width: double.infinity,
           decoration: const BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topCenter,
@@ -84,132 +86,130 @@ class _NoInternetPageState extends State<NoInternetPage>
               colors: AppColors.primaryGradient,
             ),
           ),
-          child: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // Animated Icon
-                  AnimatedBuilder(
-                    animation: _controller,
-                    builder: (context, child) {
-                      return Transform.scale(
-                        scale: _scaleAnimation.value,
-                        child: Container(
-                          height: 150,
-                          width: 150,
-                          decoration: BoxDecoration(
-                            color: AppColors.secondaryLight.withOpacity(0.9),
-                            borderRadius: BorderRadius.circular(75),
-                            boxShadow: [
-                              BoxShadow(
-                                color: AppColors.shadowLight,
-                                blurRadius: 20,
-                                spreadRadius: 5,
-                              ),
-                            ],
-                          ),
-                          child: const Icon(
-                            Icons.wifi_off_rounded,
-                            size: 80,
-                            color: AppColors.primary,
-                          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // Animated Icon
+                AnimatedBuilder(
+                  animation: _controller,
+                  builder: (context, child) {
+                    return Transform.scale(
+                      scale: _scaleAnimation.value,
+                      child: Container(
+                        height: 150,
+                        width: 150,
+                        decoration: BoxDecoration(
+                          color: AppColors.secondaryLight.withOpacity(0.9),
+                          borderRadius: BorderRadius.circular(75),
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppColors.shadowLight,
+                              blurRadius: 20,
+                              spreadRadius: 5,
+                            ),
+                          ],
                         ),
-                      );
-                    },
+                        child: const Icon(
+                          Icons.wifi_off_rounded,
+                          size: 80,
+                          color: AppColors.primary,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+
+                const SizedBox(height: 40),
+
+                // Title
+                const Text(
+                  'No Internet Connection',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.white,
+                    letterSpacing: 0.5,
                   ),
+                ),
 
-                  const SizedBox(height: 40),
+                const SizedBox(height: 16),
 
-                  // Title
-                  const Text(
-                    'No Internet Connection',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.white,
-                      letterSpacing: 0.5,
+                // Description
+                const Text(
+                  'Please check your internet connection\nand try again',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: AppColors.white,
+                    letterSpacing: 0.3,
+                    height: 1.5,
+                  ),
+                ),
+
+                const SizedBox(height: 40),
+
+                // Updated Retry Button
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(30),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColors.shadowLight,
+                        blurRadius: 10,
+                        spreadRadius: 2,
+                      ),
+                    ],
+                  ),
+                  child: ElevatedButton(
+                    onPressed: _isChecking ? null : _checkInternetAndNavigate,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.secondaryLight,
+                      foregroundColor: AppColors.primary,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 32, vertical: 16),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      elevation: 0,
                     ),
-                  ),
-
-                  const SizedBox(height: 16),
-
-                  // Description
-                  const Text(
-                    'Please check your internet connection\nand try again',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: AppColors.white,
-                      letterSpacing: 0.3,
-                      height: 1.5,
-                    ),
-                  ),
-
-                  const SizedBox(height: 40),
-
-                  // Updated Retry Button
-                  Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30),
-                      boxShadow: [
-                        BoxShadow(
-                          color: AppColors.shadowLight,
-                          blurRadius: 10,
-                          spreadRadius: 2,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (_isChecking)
+                          const SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                  AppColors.primary),
+                            ),
+                          )
+                        else
+                          AnimatedBuilder(
+                            animation: _controller,
+                            builder: (context, child) {
+                              return Transform.rotate(
+                                angle: _controller.value * 2 * 3.14,
+                                child: const Icon(Icons.refresh),
+                              );
+                            },
+                          ),
+                        const SizedBox(width: 8),
+                        Text(
+                          _isChecking ? 'Checking...' : 'Try Again',
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ],
                     ),
-                    child: ElevatedButton(
-                      onPressed: _isChecking ? null : _checkInternetAndNavigate,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.secondaryLight,
-                        foregroundColor: AppColors.primary,
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 32, vertical: 16),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        elevation: 0,
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          if (_isChecking)
-                            const SizedBox(
-                              width: 20,
-                              height: 20,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                valueColor: AlwaysStoppedAnimation<Color>(
-                                    AppColors.primary),
-                              ),
-                            )
-                          else
-                            AnimatedBuilder(
-                              animation: _controller,
-                              builder: (context, child) {
-                                return Transform.rotate(
-                                  angle: _controller.value * 2 * 3.14,
-                                  child: const Icon(Icons.refresh),
-                                );
-                              },
-                            ),
-                          const SizedBox(width: 8),
-                          Text(
-                            _isChecking ? 'Checking...' : 'Try Again',
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),

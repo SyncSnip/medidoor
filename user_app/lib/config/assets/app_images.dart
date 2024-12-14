@@ -11,16 +11,16 @@ class AppImages {
 
   static String coughCold = getImageName('cough-cold');
   static String diabetes = getImageName('diabetes');
-  static String eyeCare = '${products}eye-care.svg';
-  static String firstAid = '${products}first-aid.svg';
-  static String healthcareDevices = '${products}healthcare-devices.svg';
-  static String immunity = '${products}immunity.svg';
-  static String motherBaby = '${products}mother-baby.svg';
-  static String painRelief = '${products}pain-relief.svg';
-  static String personalCare = '${products}personal-care.svg';
-  static String skinCare = '${products}skin-care.svg';
-  static String stomachDigestion = '${products}stomach-digestion.svg';
-  static String vitaminsSupplements = '${products}vitamins-supplements.svg';
+  static String eyeCare = '${images}eye-care.svg';
+  static String firstAid = '${images}first-aid.svg';
+  static String healthcareDevices = '${images}healthcare-devices.svg';
+  static String immunity = '${images}immunity.svg';
+  static String motherBaby = '${images}mother-baby.svg';
+  static String painRelief = '${images}pain-relief.svg';
+  static String personalCare = '${images}personal-care.svg';
+  static String skinCare = '${images}skin-care.svg';
+  static String stomachDigestion = '${images}stomach-digestion.svg';
+  static String vitaminsSupplements = '${images}vitamins-supplements.svg';
   //options images
   static String orderMedicine = getImageName('medicine');
   static String requestMedicine = getImageName('request-medicine');
