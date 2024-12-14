@@ -3,14 +3,15 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:user_app/data/sources/auth_source.dart';
 
 part 'profile_event.dart';
 part 'profile_state.dart';
 
 class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   ProfileBloc() : super(ProfileInitial()) {
-    on<ProfileEvent>((event, emit) {});
     on<ProfileSignOutEvent>(profileSignOutEvent);
+    on<ProfileNormalEvent>(profileNormalEvent);
   }
 
   FutureOr<void> profileSignOutEvent(
@@ -27,5 +28,11 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       emit(ProfileSignOutFailureState());
       return;
     }
+  }
+
+  FutureOr<void> profileNormalEvent(
+      ProfileNormalEvent event, Emitter<ProfileState> emit) async {
+    emit(ProfileInitial(name: AuthSource().getName));
+    return;
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:user_app/config/theme/app_theme.dart';
+import 'package:user_app/data/sources/auth_source.dart';
 import 'package:user_app/presentation/splashscreen/pages/splashscreen.dart';
 
 void main() async {
@@ -16,6 +17,13 @@ class MainApp extends StatefulWidget {
 }
 
 class _MainAppState extends State<MainApp> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    AuthSource().initialAuthSource();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

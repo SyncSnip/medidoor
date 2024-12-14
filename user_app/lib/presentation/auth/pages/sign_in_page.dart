@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:user_app/common/pages/something_went_wrong.dart';
 import 'package:user_app/common/widgets/loading.dart';
 import 'package:user_app/config/extensions/extensions.dart';
 import 'package:user_app/presentation/auth/bloc/auth_bloc.dart';
@@ -17,7 +16,7 @@ class SignInPage extends StatefulWidget {
 }
 
 class _SignInPageState extends State<SignInPage> {
-  final _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final AuthBloc _authBloc = AuthBloc();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passController = TextEditingController();

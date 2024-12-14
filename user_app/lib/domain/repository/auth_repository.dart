@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:user_app/common/helper_function/http_provider.dart';
@@ -40,8 +39,6 @@ class AuthRepository {
         json: {"email": email, "password": password, "name": name});
     int code = response.statusCode;
 
-    log(response.body.toString());
-
     if (code == 201) {
       final responseData = jsonDecode(response.body);
 
@@ -65,16 +62,12 @@ class AuthRepository {
 
   static Future<int> verifyEmail(String otp) async {
     try {
-      log('token: ${AuthSource().getToken}');
       final response = await request(
           ApiOperations.put, AuthEndpoints.verifyEmail,
           token: AuthSource().getToken, json: {"otp": otp});
 
-      log('api res: ${response.body}');
-
       return response.statusCode;
     } catch (e) {
-      log(e.toString());
       return 400;
     }
   }

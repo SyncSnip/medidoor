@@ -4,3 +4,5 @@ part of 'profile_bloc.dart';
 abstract class ProfileEvent {}
 
 class ProfileSignOutEvent extends ProfileEvent {}
+
+class ProfileNormalEvent extends ProfileEvent {}
