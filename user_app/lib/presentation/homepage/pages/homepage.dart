@@ -118,14 +118,16 @@ class _HomepageState extends State<Homepage> {
                       Center(
                         child: SizedBox(
                           width: MediaQuery.of(context).size.width * 0.87,
-                          height: MediaQuery.of(context).size.height * 0.06,
+                          height: MediaQuery.of(context).size.height * 0.05,
                           child: TextField(
                             decoration: InputDecoration(
                               hintText: 'Search',
                               prefixIcon: const Icon(Icons.search),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(30),
-                                borderSide: BorderSide.none,
+                                borderSide: const BorderSide(
+                                    color: Color.fromARGB(255, 185, 183, 183),
+                                    width: 0.2),
                               ),
                               filled: true,
                               fillColor: Colors.grey[200],
@@ -134,40 +136,45 @@ class _HomepageState extends State<Homepage> {
                         ),
                       ),
                       const SizedBox(height: 16),
-                      CarouselSlider.builder(
-                          options: CarouselOptions(
-                              autoPlayAnimationDuration:
-                                  const Duration(milliseconds: 800),
-                              padEnds: true,
-                              autoPlay: true,
-                              height: MediaQuery.of(context).size.height * 0.2,
-                              viewportFraction: 1,
-                              enlargeCenterPage: true,
-                              enlargeStrategy: CenterPageEnlargeStrategy.height,
-                              onPageChanged: (index, reason) {
-                                setState(() {
-                                  activeindex = index;
-                                });
-                              }),
-                          itemCount: 3,
-                          itemBuilder: (context, index, realIndex) {
-                            // final res = wallpaperImage[index];
-                            return Container(
-                              // height: 140,
-                              height: 120,
-                              width: MediaQuery.of(context).size.width,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: Container(
+                      SizedBox(
+                        width: double.infinity,
+                        child: CarouselSlider.builder(
+                            options: CarouselOptions(
+                                autoPlayAnimationDuration:
+                                    const Duration(milliseconds: 800),
+                                padEnds: true,
+                                autoPlay: true,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.2,
+                                viewportFraction: 1,
+                                enlargeCenterPage: true,
+                                enlargeStrategy:
+                                    CenterPageEnlargeStrategy.height,
+                                onPageChanged: (index, reason) {
+                                  setState(() {
+                                    activeindex = index;
+                                  });
+                                }),
+                            itemCount: 3,
+                            itemBuilder: (context, index, realIndex) {
+                              // final res = wallpaperImage[index];
+                              return Container(
+                                // height: 140,
+                                height: 120,
+                                width: MediaQuery.of(context).size.width,
                                 decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(12),
-                                    image: DecorationImage(
-                                        image: AssetImage(images[index]))),
-                                padding: const EdgeInsets.all(16),
-                              ),
-                            );
-                          }),
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(12),
+                                      image: DecorationImage(
+                                          image: AssetImage(images[index]))),
+                                  padding: const EdgeInsets.all(16),
+                                ),
+                              );
+                            }),
+                      ),
                       const SizedBox(
                         height: 20,
                       ),
@@ -446,35 +453,51 @@ class _HomepageState extends State<Homepage> {
   }
 
   Widget _buildProductCard(ProductModel productModel) {
-    return InkWell(
+    return GestureDetector(
       onTap: () => context.push(ProductDetailsPage(productModel: productModel)),
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 10),
-        width: 175, // Adjust width as needed
+        width: 165, // Adjust width as needed
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: const Color.fromARGB(255, 255, 255, 255),
           border: Border.all(color: Colors.grey[300]!),
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.2),
-              spreadRadius: 2,
-              blurRadius: 5,
-              offset: const Offset(0, 3),
+              color: const Color.fromARGB(255, 121, 114, 114).withOpacity(0.2),
+              spreadRadius: 1,
+              blurRadius: 8,
+              offset: const Offset(-2, -3),
             ),
           ],
         ),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
               height: 100, // Adjust height as needed
               decoration: BoxDecoration(
-                borderRadius:
-                    const BorderRadius.vertical(top: Radius.circular(12)),
-                image: DecorationImage(
-                  image: NetworkImage(productModel.prodType.image),
-                  fit: BoxFit.cover,
+                  color: Colors.white,
+                  boxShadow: const [
+                    BoxShadow(
+                        offset: Offset(0, 2),
+                        color: Color.fromARGB(255, 207, 202, 202))
+                  ],
+                  // color: Colors.amberAccent,
+                  borderRadius: BorderRadius.circular(10)),
+
+              child: Center(
+                child: Container(
+                  height: 100,
+                  width: 100,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    // color: Colors.amberAccent,
+                  ),
+                  child: Image.asset(
+                    'assets/images/vicks-vaporub.png',
+                    height: 100,
+                  ),
                 ),
               ),
             ),
@@ -532,6 +555,7 @@ class _HomepageState extends State<Homepage> {
                   ),
                   const SizedBox(height: 4),
                   const Row(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
                         '₹105',
@@ -562,6 +586,7 @@ class _HomepageState extends State<Homepage> {
                   ),
                   const SizedBox(height: 8),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       GestureDetector(
                         onTap: () {},
@@ -582,11 +607,11 @@ class _HomepageState extends State<Homepage> {
                           child: Text(
                             'Add to Cart',
                             style: GoogleFonts.sourceSans3(
-                                fontSize: 12, color: Colors.green),
+                                fontSize: 12,
+                                color: const Color.fromARGB(255, 58, 129, 60)),
                           ),
                         ),
                       ),
-                      const SizedBox(width: 5),
                       IconButton(
                         onPressed: () {},
                         icon: const Icon(

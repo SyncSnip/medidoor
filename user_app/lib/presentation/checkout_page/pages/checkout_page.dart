@@ -398,28 +398,40 @@ class _CheckoutPageState extends State<CheckoutPage> {
 
                 // Delivery Instructions
                 const SizedBox(height: 24),
-                const Text(
-                  'Delivery instructions',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
+                    color: Colors.green.shade100,
+                    borderRadius: BorderRadius.circular(8),
                   ),
-                ),
-                const SizedBox(height: 16),
-                Wrap(
-                  spacing: 16,
-                  runSpacing: 16,
-                  alignment: WrapAlignment.spaceAround,
-                  children: [
-                    _buildInstructionItem(Icons.mic, 'Record'),
-                    _buildInstructionItem(
-                        Icons.phone_disabled, 'Avoid\ncalling'),
-                    _buildInstructionItem(
-                        Icons.notifications_off, 'Don\'t ring\nthe bell'),
-                    _buildInstructionItem(
-                        Icons.add_circle_outline, 'Add other\ninstructions'),
-                  ],
-                ),
+                  child: Column(
+                    children: [
+                      const Text(
+                        'Delivery instructions',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      Wrap(
+                          alignment: WrapAlignment.spaceEvenly,
+                          // crossAxisAlignment: WrapCrossAlignment.center,
+
+                          spacing: 16,
+                          children: [
+                            _buildInstructionItem(Icons.mic, 'Record'),
+                            _buildInstructionItem(
+                                Icons.phone_disabled, 'Avoid\ncalling'),
+                            _buildInstructionItem(Icons.notifications_off,
+                                'Don\'t ring\nthe bell'),
+                            _buildInstructionItem(Icons.add_circle_outline,
+                                'Add other\ninstructions'),
+                          ]),
+                    ],
+                  ),
+                )
               ],
             ),
           ),
@@ -554,7 +566,20 @@ class _CheckoutPageState extends State<CheckoutPage> {
     bool isPrescriptionRequired = false,
   }) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 12),
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            spreadRadius: 2,
+            blurRadius: 5,
+            offset: const Offset(0, 3),
+          ),
+        ],
+      ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -563,6 +588,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
             height: 80,
             width: 80,
             decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
               image: DecorationImage(
                 image: Image.network(image).image,
                 fit: BoxFit.cover,
@@ -652,26 +678,24 @@ class _CheckoutPageState extends State<CheckoutPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               IconButton(
-                icon: const Icon(Icons.remove),
-                onPressed: () => _decrementQuantity(name),
-                style: IconButton.styleFrom(
-                  backgroundColor: Colors.green.shade50,
-                  padding: const EdgeInsets.all(8),
+                icon: Icon(
+                  Icons.remove_circle,
+                  color: Colors.red[500],
+                  size: 25,
                 ),
-                iconSize: 20,
+                onPressed: () => _decrementQuantity(name),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 4),
                 child: Text('${quantities[name] ?? 1}'),
               ),
               IconButton(
-                icon: const Icon(Icons.add),
-                onPressed: () => _incrementQuantity(name),
-                style: IconButton.styleFrom(
-                  backgroundColor: Colors.green.shade50,
-                  padding: const EdgeInsets.all(8),
+                icon: Icon(
+                  Icons.add_circle,
+                  color: Colors.green[500],
+                  size: 25,
                 ),
-                iconSize: 20,
+                onPressed: () => _incrementQuantity(name),
               ),
             ],
           ),
@@ -788,7 +812,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
         Container(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey.shade300),
+            color: Colors.green.shade50,
+            border: Border.all(color: Colors.grey.shade200),
             borderRadius: BorderRadius.circular(8),
           ),
           child: Icon(icon),
@@ -799,7 +824,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 12,
-            color: Colors.grey.shade600,
+            color: Colors.grey.shade700,
           ),
         ),
       ],
