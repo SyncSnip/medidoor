@@ -261,8 +261,6 @@ class _HomepageState extends State<Homepage> {
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
                               crossAxisCount: 4,
-                              mainAxisSpacing: 8,
-                              crossAxisSpacing: 8,
                               children: [
                                 _buildCategoryCard(
                                     AppImages.diabetes, 'Diabetes'),
@@ -362,8 +360,6 @@ class _HomepageState extends State<Homepage> {
                               shrinkWrap: true,
                               physics: const NeverScrollableScrollPhysics(),
                               crossAxisCount: 4,
-                              mainAxisSpacing: 8,
-                              crossAxisSpacing: 8,
                               children: [
                                 _buildCategoryCard(
                                     AppImages.diabetes, 'Diabetes'),

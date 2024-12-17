@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:provider/provider.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
+import 'package:user_app/data/model/product_model.dart';
+import 'package:user_app/data/repository/cart_provider.dart';
 import 'package:user_app/data/sources/auth_source.dart';
 
 class CheckoutPage extends StatefulWidget {
@@ -11,13 +14,11 @@ class CheckoutPage extends StatefulWidget {
 }
 
 class _CheckoutPageState extends State<CheckoutPage> {
-  // Map to store like status for each product
   Map<String, bool> likedProducts = {};
 
   final _razorpay = Razorpay();
-  // Map to store quantities for each product
-  Map<String, int> quantities = {};
-  double amount = 283.0; // Set initial amount
+  Map<int, ProductModel> quantities = {};
+  double amount = 283.0;
 
   @override
   void initState() {
@@ -27,225 +28,26 @@ class _CheckoutPageState extends State<CheckoutPage> {
     _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
     _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
 
-    // Initialize default quantities
-    quantities['Vicks Vaporub Balm'] = 1;
-    quantities['Glycomet Gp 2 Tablet 15'] = 1;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final cartProvider = Provider.of<CartProvider>(context, listen: false);
 
-    // Calculate initial amount
-    _calculateTotalAmount();
-  }
+      for (var item in cartProvider.cartItems) {
+        quantities[item.prodId] = item;
+      }
 
-  void _calculateTotalAmount() {
-    double total = 0;
-
-    // Add price for Vicks Vaporub
-    total += 105 * (quantities['Vicks Vaporub Balm'] ?? 1);
-
-    // Add price for Glycomet
-    total += 146 * (quantities['Glycomet Gp 2 Tablet 15'] ?? 1);
-
-    // Add delivery and handling charges
-    total += 32; // 30 for delivery + 2 for handling
-
-    setState(() {
-      amount = total;
-    });
-  }
-
-  void _incrementQuantity(String productId) {
-    setState(() {
-      quantities[productId] = (quantities[productId] ?? 1) + 1;
       _calculateTotalAmount();
     });
   }
 
-  void _decrementQuantity(String productId) {
-    if ((quantities[productId] ?? 1) > 1) {
-      setState(() {
-        quantities[productId] = (quantities[productId] ?? 1) - 1;
-        _calculateTotalAmount();
-      });
-    }
-  }
-
-  void _handlePaymentSuccess(PaymentSuccessResponse response) {
-    showModalBottomSheet(
-      context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (context) => Container(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Icon(
-              Icons.check_circle,
-              color: Colors.green,
-              size: 64,
-            ),
-            const SizedBox(height: 16),
-            const Text(
-              'Payment Successful!',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'Payment ID: ${response.paymentId}',
-              style: TextStyle(color: Colors.grey.shade600),
-            ),
-            const SizedBox(height: 24),
-            ElevatedButton(
-              onPressed: () {
-                // Navigate to order tracking page
-                Navigator.pop(context);
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green,
-                minimumSize: const Size(double.infinity, 50),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-              child: const Text(
-                'Track Order',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontFamily: 'GoogleFonts.sourceSans3',
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  void _handlePaymentError(PaymentFailureResponse response) {
-    showModalBottomSheet(
-      context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (context) => Container(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Icon(
-              Icons.error_outline,
-              color: Colors.red,
-              size: 64,
-            ),
-            const SizedBox(height: 16),
-            const Text(
-              'Payment Failed',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'Error: ${response.message}',
-              style: TextStyle(color: Colors.grey.shade600),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 24),
-            Row(
-              children: [
-                Expanded(
-                  child: OutlinedButton(
-                    onPressed: () => Navigator.pop(context),
-                    style: OutlinedButton.styleFrom(
-                      minimumSize: const Size(0, 50),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    child: const Text('Cancel'),
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      // Retry payment logic
-                      Navigator.pop(context);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
-                      minimumSize: const Size(0, 50),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    child: const Text(
-                      'Retry',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  void _handleExternalWallet(ExternalWalletResponse response) {
-    showModalBottomSheet(
-      context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (context) => Container(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Icon(
-              Icons.account_balance_wallet,
-              color: Colors.blue,
-              size: 64,
-            ),
-            const SizedBox(height: 16),
-            const Text(
-              'External Wallet',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'Wallet: ${response.walletName}',
-              style: TextStyle(color: Colors.grey.shade600),
-            ),
-            const SizedBox(height: 24),
-            ElevatedButton(
-              onPressed: () => Navigator.pop(context),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green,
-                minimumSize: const Size(double.infinity, 50),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-              child: const Text('Continue'),
-            ),
-          ],
-        ),
-      ),
-    );
+  @override
+  void dispose() {
+    _razorpay.clear();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    CartProvider cartProvider = Provider.of<CartProvider>(context);
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -266,27 +68,18 @@ class _CheckoutPageState extends State<CheckoutPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Cart Items
-                _buildCartItem(
-                  'Vicks Vaporub Balm',
-                  '100 ml',
-                  105,
-                  109,
-                  '4% off',
-                  "https://5.imimg.com/data5/FX/JG/NN/GLADMIN-41894397/selection-013-1000x1000.png",
-                ),
+                ListView.separated(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      final productId = quantities.keys.elementAt(index);
+                      return _buildCartItem(quantities[productId]!);
+                    },
+                    separatorBuilder: (context, index) {
+                      return const Divider();
+                    },
+                    itemCount: quantities.length),
                 const Divider(),
-                _buildCartItem(
-                  'Glycomet Gp 2 Tablet 15',
-                  '2 MG',
-                  146,
-                  178,
-                  '18% off',
-                  "https://5.imimg.com/data5/FX/JG/NN/GLADMIN-41894397/selection-013-1000x1000.png",
-                  isPrescriptionRequired: true,
-                ),
-
-                // Prescription Actions
                 const SizedBox(height: 16),
                 Wrap(
                   spacing: 16,
@@ -318,8 +111,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     ),
                   ],
                 ),
-
-                // Similar Products
                 const SizedBox(height: 24),
                 const Text(
                   'Add Similar products',
@@ -354,8 +145,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     ],
                   ),
                 ),
-
-                // Delivery Offer
                 const SizedBox(height: 24),
                 Container(
                   padding: const EdgeInsets.all(12),
@@ -378,8 +167,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     ],
                   ),
                 ),
-
-                // Bill Details
                 const SizedBox(height: 24),
                 const Text(
                   'Bill details',
@@ -395,8 +182,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
                 const Divider(),
                 _buildBillRow('Grand total', '₹${amount.toStringAsFixed(0)}',
                     isBold: true),
-
-                // Delivery Instructions
                 const SizedBox(height: 24),
                 Container(
                   padding: const EdgeInsets.all(10),
@@ -417,8 +202,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       const SizedBox(height: 16),
                       Wrap(
                           alignment: WrapAlignment.spaceEvenly,
-                          // crossAxisAlignment: WrapCrossAlignment.center,
-
                           spacing: 16,
                           children: [
                             _buildInstructionItem(Icons.mic, 'Record'),
@@ -519,7 +302,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
 
                     final options = {
                       'key': razorpayKey,
-                      'amount': (amount * 100).toInt(), // Convert to paise
+                      'amount': (amount * 100).toInt(),
                       'name': 'Medidoor',
                       'description': 'Paying',
                       'prefill': {
@@ -556,15 +339,213 @@ class _CheckoutPageState extends State<CheckoutPage> {
     );
   }
 
-  Widget _buildCartItem(
-    String name,
-    String size,
-    double price,
-    double originalPrice,
-    String discount,
-    String image, {
-    bool isPrescriptionRequired = false,
-  }) {
+  void _calculateTotalAmount() {
+    double total = 0;
+    for (var product in quantities.values) {
+      total += product.price * int.parse(product.quantity);
+    }
+    total += 32; // Handling and delivery charges
+    setState(() {
+      amount = total;
+    });
+  }
+
+  void _incrementQuantity(int productId) {
+    setState(() {
+      if (quantities.containsKey(productId)) {
+        int q = int.parse(quantities[productId]!.quantity);
+        q++;
+        _calculateTotalAmount();
+      }
+    });
+  }
+
+  void _decrementQuantity(int productId) {
+    setState(() {
+      if (quantities.containsKey(productId) &&
+          int.parse(quantities[productId]!.quantity) > 1) {
+        int q = int.parse(quantities[productId]!.quantity);
+        q--;
+        _calculateTotalAmount();
+      }
+    });
+  }
+
+  void _handlePaymentSuccess(PaymentSuccessResponse response) {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) => Container(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(
+              Icons.check_circle,
+              color: Colors.green,
+              size: 64,
+            ),
+            const SizedBox(height: 16),
+            const Text(
+              'Payment Successful!',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Payment ID: ${response.paymentId}',
+              style: TextStyle(color: Colors.grey.shade600),
+            ),
+            const SizedBox(height: 24),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green,
+                minimumSize: const Size(double.infinity, 50),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              child: const Text(
+                'Track Order',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontFamily: 'GoogleFonts.sourceSans3',
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _handlePaymentError(PaymentFailureResponse response) {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) => Container(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(
+              Icons.error_outline,
+              color: Colors.red,
+              size: 64,
+            ),
+            const SizedBox(height: 16),
+            const Text(
+              'Payment Failed',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Error: ${response.message}',
+              style: TextStyle(color: Colors.grey.shade600),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 24),
+            Row(
+              children: [
+                Expanded(
+                  child: OutlinedButton(
+                    onPressed: () => Navigator.pop(context),
+                    style: OutlinedButton.styleFrom(
+                      minimumSize: const Size(0, 50),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: const Text('Cancel'),
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green,
+                      minimumSize: const Size(0, 50),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: const Text(
+                      'Retry',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _handleExternalWallet(ExternalWalletResponse response) {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) => Container(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(
+              Icons.account_balance_wallet,
+              color: Colors.blue,
+              size: 64,
+            ),
+            const SizedBox(height: 16),
+            const Text(
+              'External Wallet',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Wallet: ${response.walletName}',
+              style: TextStyle(color: Colors.grey.shade600),
+            ),
+            const SizedBox(height: 24),
+            ElevatedButton(
+              onPressed: () => Navigator.pop(context),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green,
+                minimumSize: const Size(double.infinity, 50),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              child: const Text('Continue'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCartItem(ProductModel product) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8),
       padding: const EdgeInsets.all(12),
@@ -583,28 +564,24 @@ class _CheckoutPageState extends State<CheckoutPage> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Image container
           Container(
             height: 80,
             width: 80,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
               image: DecorationImage(
-                image: Image.network(image).image,
+                image: NetworkImage(product.prodType.image),
                 fit: BoxFit.cover,
               ),
             ),
           ),
           const SizedBox(width: 12),
-
-          // Product details
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Product name
                 Text(
-                  name,
+                  product.name,
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
@@ -613,13 +590,11 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 4),
-
-                // Size and prescription info
                 Wrap(
                   spacing: 8,
                   children: [
-                    Text('Size: $size'),
-                    if (isPrescriptionRequired)
+                    Text('Quantity: ${product.quantity}'),
+                    if (product.prodType.typeCode == 'PRESCRIPTION')
                       Text(
                         '*Prescription required',
                         style: TextStyle(
@@ -630,21 +605,19 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   ],
                 ),
                 const SizedBox(height: 8),
-
-                // Price details
                 Wrap(
                   spacing: 8,
                   crossAxisAlignment: WrapCrossAlignment.center,
                   children: [
                     Text(
-                      '₹$price',
+                      '₹${product.price}',
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     Text(
-                      '₹$originalPrice',
+                      '₹${(product.price * 1.1).toInt()}',
                       style: TextStyle(
                         decoration: TextDecoration.lineThrough,
                         color: Colors.grey.shade600,
@@ -660,7 +633,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                         borderRadius: BorderRadius.circular(4),
                       ),
                       child: Text(
-                        discount,
+                        '10% off',
                         style: TextStyle(
                           color: Colors.green.shade700,
                           fontSize: 12,
@@ -672,9 +645,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
               ],
             ),
           ),
-
-          // Quantity controls
-          Row(
+          Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               IconButton(
@@ -683,11 +654,11 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   color: Colors.red[500],
                   size: 25,
                 ),
-                onPressed: () => _decrementQuantity(name),
+                onPressed: () => _decrementQuantity(product.prodId),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 4),
-                child: Text('${quantities[name] ?? 1}'),
+                child: Text('${product.quantity}'),
               ),
               IconButton(
                 icon: Icon(
@@ -695,7 +666,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   color: Colors.green[500],
                   size: 25,
                 ),
-                onPressed: () => _incrementQuantity(name),
+                onPressed: () => _incrementQuantity(product.prodId),
               ),
             ],
           ),
@@ -849,7 +820,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
       ),
       onPressed: () {
         setState(() {
-          // Toggle like status for specific product
           likedProducts[productId] = !(likedProducts[productId] ?? false);
         });
       },

@@ -71,45 +71,47 @@ class _CategoriesPageState extends State<CategoriesPage> {
               ),
             ),
             const SizedBox(height: 40.0),
-            ...categories.map((category) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    category,
-                    style: GoogleFonts.roboto(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w500, // Reduced boldness
-                      color: Colors.black, // Changed color to black
+            Column(
+              children: categories.map((category) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      category,
+                      style: GoogleFonts.roboto(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500, // Reduced boldness
+                        color: Colors.black, // Changed color to black
+                      ),
                     ),
-                  ),
-                  // const SizedBox(height: 8.0),
-                  GridView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 4,
-                      // mainAxisSpacing: 12,
-                      // crossAxisSpacing: 12,
-                      childAspectRatio: 1,
+                    // const SizedBox(height: 8.0),
+                    GridView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 4,
+                        // mainAxisSpacing: 12,
+                        // crossAxisSpacing: 12,
+                        // childAspectRatio: 1,
+                      ),
+                      itemCount: images.length,
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                          onTap: () {
+                            // Handle item tap
+                          },
+                          child: _buildCategoryCard(
+                            images[index % images.length],
+                            titles[index % titles.length],
+                          ),
+                        );
+                      },
                     ),
-                    itemCount: images.length,
-                    itemBuilder: (context, index) {
-                      return GestureDetector(
-                        onTap: () {
-                          // Handle item tap
-                        },
-                        child: _buildCategoryCard(
-                          images[index % images.length],
-                          titles[index % titles.length],
-                        ),
-                      );
-                    },
-                  ),
-                ],
-              );
-            }),
+                  ],
+                );
+              }).toList(),
+            ),
           ],
         ),
       ),
@@ -143,19 +145,10 @@ class _CategoriesPageState extends State<CategoriesPage> {
               ),
             ],
           ),
-          child: Column(
-            children: [
-              Stack(
-                alignment: Alignment.center,
-                children: [
-                  Image.asset(
-                    imagePath,
-                    height: 40,
-                    width: 40,
-                  ),
-                ],
-              ),
-            ],
+          child: Image.asset(
+            imagePath,
+            height: 40,
+            width: 40,
           ),
         ),
         const SizedBox(height: 8),

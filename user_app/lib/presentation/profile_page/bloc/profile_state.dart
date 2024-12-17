@@ -3,10 +3,10 @@ part of 'profile_bloc.dart';
 @immutable
 abstract class ProfileState {}
 
-class ProfileInitial extends ProfileState {
+class ProfileInitialState extends ProfileState {
   final String? name;
 
-  ProfileInitial({this.name});
+  ProfileInitialState({this.name});
 }
 
 class ProfileSignOutLoadingState extends ProfileState {}

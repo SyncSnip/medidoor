@@ -241,66 +241,66 @@ class _SignInPageState extends State<SignInPage> {
                               ),
                             ),
                             20.ah,
-                            const Center(
-                              child: Text(
-                                "Or",
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w700,
-                                  color: Colors.black87,
-                                ),
-                              ),
-                            ),
-                            20.ah,
-                            Center(
-                              child: GestureDetector(
-                                onTap: () {
-                                  // Handle Google login
-                                },
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 50,
-                                    vertical: 8,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(30),
-                                    border: Border.all(
-                                      color: const Color.fromARGB(
-                                          255, 196, 195, 195),
-                                      width: 2,
-                                    ),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.grey.withOpacity(0.1),
-                                        spreadRadius: 1,
-                                        blurRadius: 4,
-                                        offset: const Offset(0, 2),
-                                      ),
-                                    ],
-                                  ),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      SvgPicture.asset(
-                                        'assets/icons/google.svg',
-                                        height: 24,
-                                        width: 24,
-                                      ),
-                                      const SizedBox(width: 12),
-                                      const Text(
-                                        'with Google',
-                                        style: TextStyle(
-                                          color: Colors.black87,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
+                            // const Center(
+                            //   child: Text(
+                            //     "Or",
+                            //     style: TextStyle(
+                            //       fontSize: 12,
+                            //       fontWeight: FontWeight.w700,
+                            //       color: Colors.black87,
+                            //     ),
+                            //   ),
+                            // ),
+                            // 20.ah,
+                            // Center(
+                            //   child: GestureDetector(
+                            //     onTap: () {
+                            //       // Handle Google login
+                            //     },
+                            //     child: Container(
+                            //       padding: const EdgeInsets.symmetric(
+                            //         horizontal: 50,
+                            //         vertical: 8,
+                            //       ),
+                            //       decoration: BoxDecoration(
+                            //         color: Colors.white,
+                            //         borderRadius: BorderRadius.circular(30),
+                            //         border: Border.all(
+                            //           color: const Color.fromARGB(
+                            //               255, 196, 195, 195),
+                            //           width: 2,
+                            //         ),
+                            //         boxShadow: [
+                            //           BoxShadow(
+                            //             color: Colors.grey.withOpacity(0.1),
+                            //             spreadRadius: 1,
+                            //             blurRadius: 4,
+                            //             offset: const Offset(0, 2),
+                            //           ),
+                            //         ],
+                            //       ),
+                            //       child: Row(
+                            //         mainAxisSize: MainAxisSize.min,
+                            //         children: [
+                            //           SvgPicture.asset(
+                            //             'assets/icons/google.svg',
+                            //             height: 24,
+                            //             width: 24,
+                            //           ),
+                            //           const SizedBox(width: 12),
+                            //           const Text(
+                            //             'with Google',
+                            //             style: TextStyle(
+                            //               color: Colors.black87,
+                            //               fontSize: 16,
+                            //               fontWeight: FontWeight.w700,
+                            //             ),
+                            //           ),
+                            //         ],
+                            //       ),
+                            //     ),
+                            //   ),
+                            // ),
                           ],
                         ),
                       ),

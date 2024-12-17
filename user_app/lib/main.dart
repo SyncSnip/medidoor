@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:provider/provider.dart';
 import 'package:user_app/config/theme/app_theme.dart';
+import 'package:user_app/data/repository/cart_provider.dart';
 import 'package:user_app/data/sources/auth_source.dart';
 import 'package:user_app/presentation/splashscreen/pages/splashscreen.dart';
 
@@ -19,7 +21,6 @@ class MainApp extends StatefulWidget {
 class _MainAppState extends State<MainApp> {
   @override
   void initState() {
-    // TODO: implement initState
     AuthSource().initialAuthSource();
     super.initState();
   }
@@ -31,8 +32,14 @@ class _MainAppState extends State<MainApp> {
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.system,
-      home:
-          const SplashScreen(), // Changed from RedirectingPage to SplashScreen
+      home: MultiProvider(
+        providers: [
+          ChangeNotifierProvider(
+            create: (context) => CartProvider(),
+          ),
+        ],
+        builder: (context, child) => const SplashScreen(),
+      ), // Changed from RedirectingPage to SplashScreen
     );
   }
 }

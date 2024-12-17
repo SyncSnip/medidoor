@@ -9,7 +9,7 @@ part 'profile_event.dart';
 part 'profile_state.dart';
 
 class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
-  ProfileBloc() : super(ProfileInitial()) {
+  ProfileBloc() : super(ProfileInitialState()) {
     on<ProfileSignOutEvent>(profileSignOutEvent);
     on<ProfileNormalEvent>(profileNormalEvent);
   }
@@ -32,7 +32,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
   FutureOr<void> profileNormalEvent(
       ProfileNormalEvent event, Emitter<ProfileState> emit) async {
-    emit(ProfileInitial(name: AuthSource().getName));
+    emit(ProfileInitialState());
     return;
   }
 }
