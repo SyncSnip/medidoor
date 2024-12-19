@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 import 'package:user_app/config/extensions/extensions.dart';
 import 'package:user_app/data/model/product_model.dart';
-import 'package:user_app/data/repository/cart_provider.dart';
 import 'package:user_app/presentation/checkout_page/pages/checkout_page.dart';
 
 import '../../../config/assets/app_images.dart';
@@ -663,8 +661,6 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>
   }
 
   Widget _buildBottomBar() {
-    CartProvider cartProvider =
-        Provider.of<CartProvider>(context, listen: false);
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -743,7 +739,6 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>
                         onPressed: () {
                           setState(() {
                             quantity++;
-                            cartProvider.addToCart(widget.productModel);
                           });
                         },
                       ),
@@ -757,7 +752,6 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>
                     if (!isAddedToCart) {
                       setState(() {
                         isAddedToCart = true;
-                        cartProvider.addToCart(widget.productModel);
                       });
                     } else {
                       context.push(const CheckoutPage());

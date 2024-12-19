@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -86,19 +87,24 @@ class _ProfilePageState extends State<ProfilePage> {
                             children: [
                               const CircleAvatar(
                                 radius: 50,
-                                backgroundImage: NetworkImage(
-                                    'https://www.w3schools.com/w3images/avatar2.png'), // Updated to a working image from the internet
-                              ),
-                              const SizedBox(height: 10),
-                              Text(
-                                'Piyush Aggarwal',
-                                style: GoogleFonts.lato(
-                                  textStyle: const TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w600,
-                                  ),
+                                // backgroundImage: NetworkImage(
+                                //     'https://www.w3schools.com/w3images/avatar2.png'), // Updated to a working image from the internet
+                                backgroundImage: CachedNetworkImageProvider(
+                                  'https://www.w3schools.com/w3images/avatar2.png',
                                 ),
                               ),
+                              const SizedBox(height: 10),
+                              state.name == null
+                                  ? const Loading()
+                                  : Text(
+                                      state.name!,
+                                      style: GoogleFonts.lato(
+                                        textStyle: const TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ),
                               const SizedBox(height: 20),
                               _buildProfileOptions(context),
                               const SizedBox(height: 20),

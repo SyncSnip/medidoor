@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:provider/provider.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
-import 'package:user_app/data/model/product_model.dart';
-import 'package:user_app/data/repository/cart_provider.dart';
 import 'package:user_app/data/sources/auth_source.dart';
 
 class CheckoutPage extends StatefulWidget {
@@ -14,11 +11,13 @@ class CheckoutPage extends StatefulWidget {
 }
 
 class _CheckoutPageState extends State<CheckoutPage> {
+  // Map to store like status for each product
   Map<String, bool> likedProducts = {};
 
   final _razorpay = Razorpay();
-  Map<int, ProductModel> quantities = {};
-  double amount = 283.0;
+  // Map to store quantities for each product
+  Map<String, int> quantities = {};
+  double amount = 283.0; // Set initial amount
 
   @override
   void initState() {
@@ -28,26 +27,225 @@ class _CheckoutPageState extends State<CheckoutPage> {
     _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
     _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final cartProvider = Provider.of<CartProvider>(context, listen: false);
+    // Initialize default quantities
+    quantities['Vicks Vaporub Balm'] = 1;
+    quantities['Glycomet Gp 2 Tablet 15'] = 1;
 
-      for (var item in cartProvider.cartItems) {
-        quantities[item.prodId] = item;
-      }
+    // Calculate initial amount
+    _calculateTotalAmount();
+  }
 
+  void _calculateTotalAmount() {
+    double total = 0;
+
+    // Add price for Vicks Vaporub
+    total += 105 * (quantities['Vicks Vaporub Balm'] ?? 1);
+
+    // Add price for Glycomet
+    total += 146 * (quantities['Glycomet Gp 2 Tablet 15'] ?? 1);
+
+    // Add delivery and handling charges
+    total += 32; // 30 for delivery + 2 for handling
+
+    setState(() {
+      amount = total;
+    });
+  }
+
+  void _incrementQuantity(String productId) {
+    setState(() {
+      quantities[productId] = (quantities[productId] ?? 1) + 1;
       _calculateTotalAmount();
     });
   }
 
-  @override
-  void dispose() {
-    _razorpay.clear();
-    super.dispose();
+  void _decrementQuantity(String productId) {
+    if ((quantities[productId] ?? 1) > 1) {
+      setState(() {
+        quantities[productId] = (quantities[productId] ?? 1) - 1;
+        _calculateTotalAmount();
+      });
+    }
+  }
+
+  void _handlePaymentSuccess(PaymentSuccessResponse response) {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) => Container(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(
+              Icons.check_circle,
+              color: Colors.green,
+              size: 64,
+            ),
+            const SizedBox(height: 16),
+            const Text(
+              'Payment Successful!',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Payment ID: ${response.paymentId}',
+              style: TextStyle(color: Colors.grey.shade600),
+            ),
+            const SizedBox(height: 24),
+            ElevatedButton(
+              onPressed: () {
+                // Navigate to order tracking page
+                Navigator.pop(context);
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green,
+                minimumSize: const Size(double.infinity, 50),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              child: const Text(
+                'Track Order',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontFamily: 'GoogleFonts.sourceSans3',
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _handlePaymentError(PaymentFailureResponse response) {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) => Container(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(
+              Icons.error_outline,
+              color: Colors.red,
+              size: 64,
+            ),
+            const SizedBox(height: 16),
+            const Text(
+              'Payment Failed',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Error: ${response.message}',
+              style: TextStyle(color: Colors.grey.shade600),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 24),
+            Row(
+              children: [
+                Expanded(
+                  child: OutlinedButton(
+                    onPressed: () => Navigator.pop(context),
+                    style: OutlinedButton.styleFrom(
+                      minimumSize: const Size(0, 50),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: const Text('Cancel'),
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      // Retry payment logic
+                      Navigator.pop(context);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green,
+                      minimumSize: const Size(0, 50),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: const Text(
+                      'Retry',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _handleExternalWallet(ExternalWalletResponse response) {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) => Container(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(
+              Icons.account_balance_wallet,
+              color: Colors.blue,
+              size: 64,
+            ),
+            const SizedBox(height: 16),
+            const Text(
+              'External Wallet',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Wallet: ${response.walletName}',
+              style: TextStyle(color: Colors.grey.shade600),
+            ),
+            const SizedBox(height: 24),
+            ElevatedButton(
+              onPressed: () => Navigator.pop(context),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green,
+                minimumSize: const Size(double.infinity, 50),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              child: const Text('Continue'),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    CartProvider cartProvider = Provider.of<CartProvider>(context);
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -68,18 +266,27 @@ class _CheckoutPageState extends State<CheckoutPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                ListView.separated(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      final productId = quantities.keys.elementAt(index);
-                      return _buildCartItem(quantities[productId]!);
-                    },
-                    separatorBuilder: (context, index) {
-                      return const Divider();
-                    },
-                    itemCount: quantities.length),
+                // Cart Items
+                _buildCartItem(
+                  'Vicks Vaporub Balm',
+                  '100 ml',
+                  105,
+                  109,
+                  '4% off',
+                  "https://5.imimg.com/data5/FX/JG/NN/GLADMIN-41894397/selection-013-1000x1000.png",
+                ),
                 const Divider(),
+                _buildCartItem(
+                  'Glycomet Gp 2 Tablet 15',
+                  '2 MG',
+                  146,
+                  178,
+                  '18% off',
+                  "https://5.imimg.com/data5/FX/JG/NN/GLADMIN-41894397/selection-013-1000x1000.png",
+                  isPrescriptionRequired: true,
+                ),
+
+                // Prescription Actions
                 const SizedBox(height: 16),
                 Wrap(
                   spacing: 16,
@@ -111,6 +318,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     ),
                   ],
                 ),
+
+                // Similar Products
                 const SizedBox(height: 24),
                 const Text(
                   'Add Similar products',
@@ -145,6 +354,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     ],
                   ),
                 ),
+
+                // Delivery Offer
                 const SizedBox(height: 24),
                 Container(
                   padding: const EdgeInsets.all(12),
@@ -167,6 +378,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     ],
                   ),
                 ),
+
+                // Bill Details
                 const SizedBox(height: 24),
                 const Text(
                   'Bill details',
@@ -182,39 +395,31 @@ class _CheckoutPageState extends State<CheckoutPage> {
                 const Divider(),
                 _buildBillRow('Grand total', '₹${amount.toStringAsFixed(0)}',
                     isBold: true),
+
+                // Delivery Instructions
                 const SizedBox(height: 24),
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  width: MediaQuery.of(context).size.width,
-                  decoration: BoxDecoration(
-                    color: Colors.green.shade100,
-                    borderRadius: BorderRadius.circular(8),
+                const Text(
+                  'Delivery instructions',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
                   ),
-                  child: Column(
-                    children: [
-                      const Text(
-                        'Delivery instructions',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      Wrap(
-                          alignment: WrapAlignment.spaceEvenly,
-                          spacing: 16,
-                          children: [
-                            _buildInstructionItem(Icons.mic, 'Record'),
-                            _buildInstructionItem(
-                                Icons.phone_disabled, 'Avoid\ncalling'),
-                            _buildInstructionItem(Icons.notifications_off,
-                                'Don\'t ring\nthe bell'),
-                            _buildInstructionItem(Icons.add_circle_outline,
-                                'Add other\ninstructions'),
-                          ]),
-                    ],
-                  ),
-                )
+                ),
+                const SizedBox(height: 16),
+                Wrap(
+                  spacing: 16,
+                  runSpacing: 16,
+                  alignment: WrapAlignment.spaceAround,
+                  children: [
+                    _buildInstructionItem(Icons.mic, 'Record'),
+                    _buildInstructionItem(
+                        Icons.phone_disabled, 'Avoid\ncalling'),
+                    _buildInstructionItem(
+                        Icons.notifications_off, 'Don\'t ring\nthe bell'),
+                    _buildInstructionItem(
+                        Icons.add_circle_outline, 'Add other\ninstructions'),
+                  ],
+                ),
               ],
             ),
           ),
@@ -302,7 +507,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
 
                     final options = {
                       'key': razorpayKey,
-                      'amount': (amount * 100).toInt(),
+                      'amount': (amount * 100).toInt(), // Convert to paise
                       'name': 'Medidoor',
                       'description': 'Paying',
                       'prefill': {
@@ -339,249 +544,41 @@ class _CheckoutPageState extends State<CheckoutPage> {
     );
   }
 
-  void _calculateTotalAmount() {
-    double total = 0;
-    for (var product in quantities.values) {
-      total += product.price * int.parse(product.quantity);
-    }
-    total += 32; // Handling and delivery charges
-    setState(() {
-      amount = total;
-    });
-  }
-
-  void _incrementQuantity(int productId) {
-    setState(() {
-      if (quantities.containsKey(productId)) {
-        int q = int.parse(quantities[productId]!.quantity);
-        q++;
-        _calculateTotalAmount();
-      }
-    });
-  }
-
-  void _decrementQuantity(int productId) {
-    setState(() {
-      if (quantities.containsKey(productId) &&
-          int.parse(quantities[productId]!.quantity) > 1) {
-        int q = int.parse(quantities[productId]!.quantity);
-        q--;
-        _calculateTotalAmount();
-      }
-    });
-  }
-
-  void _handlePaymentSuccess(PaymentSuccessResponse response) {
-    showModalBottomSheet(
-      context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (context) => Container(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Icon(
-              Icons.check_circle,
-              color: Colors.green,
-              size: 64,
-            ),
-            const SizedBox(height: 16),
-            const Text(
-              'Payment Successful!',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'Payment ID: ${response.paymentId}',
-              style: TextStyle(color: Colors.grey.shade600),
-            ),
-            const SizedBox(height: 24),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green,
-                minimumSize: const Size(double.infinity, 50),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-              child: const Text(
-                'Track Order',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontFamily: 'GoogleFonts.sourceSans3',
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  void _handlePaymentError(PaymentFailureResponse response) {
-    showModalBottomSheet(
-      context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (context) => Container(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Icon(
-              Icons.error_outline,
-              color: Colors.red,
-              size: 64,
-            ),
-            const SizedBox(height: 16),
-            const Text(
-              'Payment Failed',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'Error: ${response.message}',
-              style: TextStyle(color: Colors.grey.shade600),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 24),
-            Row(
-              children: [
-                Expanded(
-                  child: OutlinedButton(
-                    onPressed: () => Navigator.pop(context),
-                    style: OutlinedButton.styleFrom(
-                      minimumSize: const Size(0, 50),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    child: const Text('Cancel'),
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
-                      minimumSize: const Size(0, 50),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    child: const Text(
-                      'Retry',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  void _handleExternalWallet(ExternalWalletResponse response) {
-    showModalBottomSheet(
-      context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (context) => Container(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Icon(
-              Icons.account_balance_wallet,
-              color: Colors.blue,
-              size: 64,
-            ),
-            const SizedBox(height: 16),
-            const Text(
-              'External Wallet',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'Wallet: ${response.walletName}',
-              style: TextStyle(color: Colors.grey.shade600),
-            ),
-            const SizedBox(height: 24),
-            ElevatedButton(
-              onPressed: () => Navigator.pop(context),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green,
-                minimumSize: const Size(double.infinity, 50),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-              child: const Text('Continue'),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildCartItem(ProductModel product) {
+  Widget _buildCartItem(
+    String name,
+    String size,
+    double price,
+    double originalPrice,
+    String discount,
+    String image, {
+    bool isPrescriptionRequired = false,
+  }) {
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 8),
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            spreadRadius: 2,
-            blurRadius: 5,
-            offset: const Offset(0, 3),
-          ),
-        ],
-      ),
+      padding: const EdgeInsets.symmetric(vertical: 12),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Image container
           Container(
             height: 80,
             width: 80,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
               image: DecorationImage(
-                image: NetworkImage(product.prodType.image),
+                image: Image.network(image).image,
                 fit: BoxFit.cover,
               ),
             ),
           ),
           const SizedBox(width: 12),
+
+          // Product details
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // Product name
                 Text(
-                  product.name,
+                  name,
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
@@ -590,11 +587,13 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 4),
+
+                // Size and prescription info
                 Wrap(
                   spacing: 8,
                   children: [
-                    Text('Quantity: ${product.quantity}'),
-                    if (product.prodType.typeCode == 'PRESCRIPTION')
+                    Text('Size: $size'),
+                    if (isPrescriptionRequired)
                       Text(
                         '*Prescription required',
                         style: TextStyle(
@@ -605,19 +604,21 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   ],
                 ),
                 const SizedBox(height: 8),
+
+                // Price details
                 Wrap(
                   spacing: 8,
                   crossAxisAlignment: WrapCrossAlignment.center,
                   children: [
                     Text(
-                      '₹${product.price}',
+                      '₹$price',
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     Text(
-                      '₹${(product.price * 1.1).toInt()}',
+                      '₹$originalPrice',
                       style: TextStyle(
                         decoration: TextDecoration.lineThrough,
                         color: Colors.grey.shade600,
@@ -633,7 +634,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                         borderRadius: BorderRadius.circular(4),
                       ),
                       child: Text(
-                        '10% off',
+                        discount,
                         style: TextStyle(
                           color: Colors.green.shade700,
                           fontSize: 12,
@@ -645,28 +646,32 @@ class _CheckoutPageState extends State<CheckoutPage> {
               ],
             ),
           ),
-          Column(
+
+          // Quantity controls
+          Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               IconButton(
-                icon: Icon(
-                  Icons.remove_circle,
-                  color: Colors.red[500],
-                  size: 25,
+                icon: const Icon(Icons.remove),
+                onPressed: () => _decrementQuantity(name),
+                style: IconButton.styleFrom(
+                  backgroundColor: Colors.green.shade50,
+                  padding: const EdgeInsets.all(8),
                 ),
-                onPressed: () => _decrementQuantity(product.prodId),
+                iconSize: 20,
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 4),
-                child: Text('${product.quantity}'),
+                child: Text('${quantities[name] ?? 1}'),
               ),
               IconButton(
-                icon: Icon(
-                  Icons.add_circle,
-                  color: Colors.green[500],
-                  size: 25,
+                icon: const Icon(Icons.add),
+                onPressed: () => _incrementQuantity(name),
+                style: IconButton.styleFrom(
+                  backgroundColor: Colors.green.shade50,
+                  padding: const EdgeInsets.all(8),
                 ),
-                onPressed: () => _incrementQuantity(product.prodId),
+                iconSize: 20,
               ),
             ],
           ),
@@ -783,8 +788,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
         Container(
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            color: Colors.green.shade50,
-            border: Border.all(color: Colors.grey.shade200),
+            border: Border.all(color: Colors.grey.shade300),
             borderRadius: BorderRadius.circular(8),
           ),
           child: Icon(icon),
@@ -795,7 +799,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
           textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 12,
-            color: Colors.grey.shade700,
+            color: Colors.grey.shade600,
           ),
         ),
       ],
@@ -820,6 +824,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
       ),
       onPressed: () {
         setState(() {
+          // Toggle like status for specific product
           likedProducts[productId] = !(likedProducts[productId] ?? false);
         });
       },

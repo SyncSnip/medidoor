@@ -23,7 +23,7 @@ This OTP is valid for the next 10 minutes. If you didn’t request this, please 
 
 We’re excited to have you on board and can’t wait for you to explore the seamless experience of MediDoor.
 
-If you have any questions, feel free to reach out at  medidoor@outlook.com.
+If you have any questions, feel free to reach out at support@medidoor.com.
 
 Warm regards,
 Team MediDoor`;

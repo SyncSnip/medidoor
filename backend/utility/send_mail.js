@@ -10,7 +10,7 @@ async function sendEmail(to, subject, text) {
   });
 
   const mailOptions = {
-    from: 'Adarsh Pradhan',
+    from: 'Medidoor No-Reply',
     to: to,
     subject: subject,
     text: text,

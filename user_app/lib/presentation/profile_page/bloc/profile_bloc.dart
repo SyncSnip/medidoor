@@ -32,7 +32,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
   FutureOr<void> profileNormalEvent(
       ProfileNormalEvent event, Emitter<ProfileState> emit) async {
-    emit(ProfileInitialState());
+    emit(ProfileInitialState(name: AuthSource().getName));
     return;
   }
 }

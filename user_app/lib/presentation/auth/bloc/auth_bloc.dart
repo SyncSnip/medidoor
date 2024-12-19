@@ -34,6 +34,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       } else if (sCode == 200) {
         emit(AuthSignInSuccessState());
         return;
+      }else if(sCode==400) {
+        
       }
       emit(AuthSignInFailureState());
       return;

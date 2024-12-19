@@ -113,6 +113,8 @@ class _SignupPageState extends State<SignupPage> {
                                     return null;
                                   },
                                   decoration: InputDecoration(
+                                    contentPadding:
+                                        const EdgeInsets.only(left: 8),
                                     filled: true,
                                     fillColor: Colors.white,
                                     focusColor: Colors.transparent,
@@ -120,6 +122,7 @@ class _SignupPageState extends State<SignupPage> {
                                       borderRadius: BorderRadius.circular(8),
                                     ),
                                   ),
+                                  style: const TextStyle(color: Colors.black),
                                 ),
                               ),
                             ),
@@ -147,6 +150,8 @@ class _SignupPageState extends State<SignupPage> {
                                     return null;
                                   },
                                   decoration: InputDecoration(
+                                    contentPadding:
+                                        const EdgeInsets.only(left: 8),
                                     filled: true,
                                     fillColor: Colors.white,
                                     focusColor: Colors.transparent,
@@ -188,6 +193,8 @@ class _SignupPageState extends State<SignupPage> {
                                     return null;
                                   },
                                   decoration: InputDecoration(
+                                    contentPadding:
+                                        const EdgeInsets.only(left: 8),
                                     filled: true,
                                     fillColor: Colors.white,
                                     focusColor: Colors.transparent,
@@ -223,6 +230,8 @@ class _SignupPageState extends State<SignupPage> {
                                     return null;
                                   },
                                   decoration: InputDecoration(
+                                    contentPadding:
+                                        const EdgeInsets.only(left: 8),
                                     filled: true,
                                     fillColor: Colors.white,
                                     focusColor: Colors.transparent,
@@ -379,7 +388,7 @@ class _SignupPageState extends State<SignupPage> {
                 ),
               );
             }
-            return Loading();
+            return const Loading();
           },
         ),
       ),

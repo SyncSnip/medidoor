@@ -33,7 +33,9 @@ Future<Response> request(
   Encoding? encoding,
 }) async {
   final String baseUrl = dotenv.env['base_url'] ?? "";
-  final url = Uri.http(baseUrl, '/api/v1/$path', params);
+  final url = dotenv.env['mode'] == "production"
+      ? Uri.https(baseUrl, '/api/v1/$path', params)
+      : Uri.http(baseUrl, '/api/v1/$path', params);
   final body = jsonEncode(json);
   late Response response;
   log('api hit: $url');

@@ -29,6 +29,7 @@ Medidoor is a powerful backend API built with Node.js, Express, and Prisma. It p
 
  - 200 OK: Successfully retrieved data.
  - 201 Created: Successfully created a resource.
+ - 400 Bad Request: Invalid request data
  - 403 Forbidden: Unauthorized user access.
  - 404 Not Found: Resource not found.
  - 500 Internal Server Error: Server encountered an error.

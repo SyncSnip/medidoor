@@ -31,7 +31,7 @@ class _MainAppState extends State<MainApp> {
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
-      themeMode: ThemeMode.system,
+      themeMode: ThemeMode.light,
       home: MultiProvider(
         providers: [
           ChangeNotifierProvider(

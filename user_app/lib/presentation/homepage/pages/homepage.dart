@@ -122,6 +122,7 @@ class _HomepageState extends State<Homepage> {
                           child: TextField(
                             decoration: InputDecoration(
                               hintText: 'Search',
+                              contentPadding: const EdgeInsets.all(0),
                               prefixIcon: const Icon(Icons.search),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(30),

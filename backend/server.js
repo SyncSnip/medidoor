@@ -9,6 +9,10 @@ const app = express();
 
 app.use(bodyParser.json());
 
+if (process.env.NODE_ENV === "production") {
+  console.log = () => { };
+}
+
 app.use('/api/v1/user', userRoutes);
 app.use('/api/v1/product', productRoutes);
 app.use('/api/v1/product-type', prodTypeRoutes);
