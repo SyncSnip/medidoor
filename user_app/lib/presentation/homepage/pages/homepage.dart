@@ -264,25 +264,99 @@ class _HomepageState extends State<Homepage> {
                               crossAxisCount: 4,
                               children: [
                                 _buildCategoryCard(
-                                    AppImages.diabetes, 'Diabetes'),
+                                  AppImages.diabetes, 'Diabetes',
+                                  const Color.fromARGB(
+                                      255, 161, 196, 224), // Start Color
+                                  const Color(0xFFC7E5E9), // First Middle Color
+                                  const Color.fromARGB(255, 209, 235,
+                                      245), // Second Middle Color
+                                  const Color.fromARGB(
+                                      255, 250, 214, 235), // Third Middle Color
+                                  const Color.fromARGB(255, 245, 183, 208),
+                                ),
                                 _buildCategoryCard(
-                                    'assets/images/stomach-health.png',
-                                    'Stomach health'),
+                                  'assets/images/stomach-health.png',
+                                  'Stomach health',
+                                  const Color.fromARGB(
+                                      255, 161, 196, 224), // Start Color
+                                  const Color(0xFFC7E5E9), // First Middle Color
+                                  const Color.fromARGB(255, 209, 235,
+                                      245), // Second Middle Color
+                                  const Color.fromARGB(
+                                      255, 250, 214, 235), // Third Middle Color
+                                  const Color.fromARGB(255, 245, 183, 208),
+                                ),
                                 _buildCategoryCard(
-                                    'assets/images/pain-injury.png',
-                                    'Pain & injury'),
+                                  'assets/images/pain-injury.png',
+                                  'Pain & injury',
+                                  const Color.fromARGB(
+                                      255, 161, 196, 224), // Start Color
+                                  const Color(0xFFC7E5E9), // First Middle Color
+                                  const Color.fromARGB(255, 209, 235,
+                                      245), // Second Middle Color
+                                  const Color.fromARGB(
+                                      255, 250, 214, 235), // Third Middle Color
+                                  const Color.fromARGB(255, 245, 183, 208),
+                                ),
                                 _buildCategoryCard(
-                                    'assets/images/eye-health.png',
-                                    'Eye Health'),
+                                  'assets/images/eye-health.png',
+                                  'Eye Health',
+                                  const Color.fromARGB(
+                                      255, 161, 196, 224), // Start Color
+                                  const Color(0xFFC7E5E9), // First Middle Color
+                                  const Color.fromARGB(255, 209, 235,
+                                      245), // Second Middle Color
+                                  const Color.fromARGB(
+                                      255, 250, 214, 235), // Third Middle Color
+                                  const Color.fromARGB(255, 245, 183, 208),
+                                ),
                                 _buildCategoryCard(
-                                    'assets/images/cough-cold.png',
-                                    'Cough & Cold'),
-                                _buildCategoryCard('assets/images/image 10.png',
-                                    'Skin health'),
+                                  'assets/images/cough-cold.png',
+                                  'Cough & Cold',
+                                  const Color.fromARGB(
+                                      255, 161, 196, 224), // Start Color
+                                  const Color(0xFFC7E5E9), // First Middle Color
+                                  const Color.fromARGB(255, 209, 235,
+                                      245), // Second Middle Color
+                                  const Color.fromARGB(
+                                      255, 250, 214, 235), // Third Middle Color
+                                  const Color.fromARGB(255, 245, 183, 208),
+                                ),
                                 _buildCategoryCard(
-                                    'assets/images/first-aid.png', 'First aid'),
-                                _buildCategoryCard('assets/images/immunity.png',
-                                    'Immunity boost'),
+                                  'assets/images/image 10.png',
+                                  'Skin health',
+                                  const Color.fromARGB(
+                                      255, 161, 196, 224), // Start Color
+                                  const Color(0xFFC7E5E9), // First Middle Color
+                                  const Color.fromARGB(255, 209, 235,
+                                      245), // Second Middle Color
+                                  const Color.fromARGB(
+                                      255, 250, 214, 235), // Third Middle Color
+                                  const Color.fromARGB(255, 245, 183, 208),
+                                ),
+                                _buildCategoryCard(
+                                  'assets/images/first-aid.png', 'First aid',
+                                  const Color.fromARGB(
+                                      255, 161, 196, 224), // Start Color
+                                  const Color(0xFFC7E5E9), // First Middle Color
+                                  const Color.fromARGB(255, 209, 235,
+                                      245), // Second Middle Color
+                                  const Color.fromARGB(
+                                      255, 250, 214, 235), // Third Middle Color
+                                  const Color.fromARGB(255, 245, 183, 208),
+                                ),
+                                _buildCategoryCard(
+                                  'assets/images/immunity.png',
+                                  'Immunity boost',
+                                  const Color.fromARGB(
+                                      255, 161, 196, 224), // Start Color
+                                  const Color(0xFFC7E5E9), // First Middle Color
+                                  const Color.fromARGB(255, 209, 235,
+                                      245), // Second Middle Color
+                                  const Color.fromARGB(
+                                      255, 250, 214, 235), // Third Middle Color
+                                  const Color.fromARGB(255, 245, 183, 208),
+                                ),
                               ],
                             ),
                             const SizedBox(height: 24),
@@ -363,25 +437,77 @@ class _HomepageState extends State<Homepage> {
                               crossAxisCount: 4,
                               children: [
                                 _buildCategoryCard(
-                                    AppImages.diabetes, 'Diabetes'),
+                                  AppImages.diabetes,
+                                  'Diabetes',
+                                  const Color.fromARGB(255, 121, 170, 235),
+                                  const Color.fromARGB(255, 112, 184, 194),
+                                  const Color.fromARGB(255, 106, 197, 152),
+                                  const Color.fromARGB(255, 130, 192, 142),
+                                  const Color.fromARGB(255, 153, 188, 133),
+                                ),
                                 _buildCategoryCard(
-                                    'assets/images/stomach-health.png',
-                                    'Stomach health'),
+                                  'assets/images/stomach-health.png',
+                                  'Stomach health',
+                                  const Color.fromARGB(255, 121, 170, 235),
+                                  const Color.fromARGB(255, 112, 184, 194),
+                                  const Color.fromARGB(255, 106, 197, 152),
+                                  const Color.fromARGB(255, 130, 192, 142),
+                                  const Color.fromARGB(255, 153, 188, 133),
+                                ),
                                 _buildCategoryCard(
-                                    'assets/images/pain-injury.png',
-                                    'Pain & injury'),
+                                  'assets/images/pain-injury.png',
+                                  'Pain & injury',
+                                  const Color.fromARGB(255, 121, 170, 235),
+                                  const Color.fromARGB(255, 112, 184, 194),
+                                  const Color.fromARGB(255, 106, 197, 152),
+                                  const Color.fromARGB(255, 130, 192, 142),
+                                  const Color.fromARGB(255, 153, 188, 133),
+                                ),
                                 _buildCategoryCard(
-                                    'assets/images/eye-health.png',
-                                    'Eye Health'),
+                                  'assets/images/eye-health.png',
+                                  'Eye Health',
+                                  const Color.fromARGB(255, 121, 170, 235),
+                                  const Color.fromARGB(255, 112, 184, 194),
+                                  const Color.fromARGB(255, 106, 197, 152),
+                                  const Color.fromARGB(255, 130, 192, 142),
+                                  const Color.fromARGB(255, 153, 188, 133),
+                                ),
                                 _buildCategoryCard(
-                                    'assets/images/cough-cold.png',
-                                    'Cough & Cold'),
-                                _buildCategoryCard('assets/images/image 10.png',
-                                    'Skin health'),
+                                  'assets/images/cough-cold.png',
+                                  'Cough & Cold',
+                                  const Color.fromARGB(255, 121, 170, 235),
+                                  const Color.fromARGB(255, 112, 184, 194),
+                                  const Color.fromARGB(255, 106, 197, 152),
+                                  const Color.fromARGB(255, 130, 192, 142),
+                                  const Color.fromARGB(255, 153, 188, 133),
+                                ),
                                 _buildCategoryCard(
-                                    'assets/images/first-aid.png', 'First aid'),
-                                _buildCategoryCard('assets/images/immunity.png',
-                                    'Immunity boost'),
+                                  'assets/images/image 10.png',
+                                  'Skin health',
+                                  const Color.fromARGB(255, 121, 170, 235),
+                                  const Color.fromARGB(255, 112, 184, 194),
+                                  const Color.fromARGB(255, 106, 197, 152),
+                                  const Color.fromARGB(255, 130, 192, 142),
+                                  const Color.fromARGB(255, 153, 188, 133),
+                                ),
+                                _buildCategoryCard(
+                                  'assets/images/first-aid.png',
+                                  'First aid',
+                                  const Color.fromARGB(255, 121, 170, 235),
+                                  const Color.fromARGB(255, 112, 184, 194),
+                                  const Color.fromARGB(255, 106, 197, 152),
+                                  const Color.fromARGB(255, 130, 192, 142),
+                                  const Color.fromARGB(255, 153, 188, 133),
+                                ),
+                                _buildCategoryCard(
+                                  'assets/images/immunity.png',
+                                  'Immunity boost',
+                                  const Color.fromARGB(255, 121, 170, 235),
+                                  const Color.fromARGB(255, 112, 184, 194),
+                                  const Color.fromARGB(255, 106, 197, 152),
+                                  const Color.fromARGB(255, 130, 192, 142),
+                                  const Color.fromARGB(255, 153, 188, 133),
+                                ),
                               ],
                             ),
                           ],
@@ -643,19 +769,31 @@ class _HomepageState extends State<Homepage> {
         ));
   }
 
-  Widget _buildCategoryCard(String imagePath, String title) {
+  Widget _buildCategoryCard(String imagePath, String title, Color clr1,
+      Color clr2, Color clr3, Color clr4, Color clr5) {
     return Column(
       children: [
         Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            gradient: const LinearGradient(
+            gradient: LinearGradient(
               colors: [
-                Color.fromARGB(255, 121, 170, 235),
-                Color.fromARGB(255, 112, 184, 194),
-                Color.fromARGB(255, 106, 197, 152),
-                Color.fromARGB(255, 130, 192, 142),
-                Color.fromARGB(255, 153, 188, 133)
+//pink blue
+                // const Color.fromARGB(
+                //                       255, 161, 196, 224), // Start Color
+                //                   const Color(0xFFC7E5E9), // First Middle Color
+                //                   const Color.fromARGB(255, 209, 235,
+                //                       245), // Second Middle Color
+                //                   const Color.fromARGB(
+                //                       255, 250, 214, 235), // Third Middle Color
+                //                   const Color.fromARGB(255, 245, 183, 208),
+//green blue
+                // Color.fromARGB(255, 121, 170, 235),
+                // Color.fromARGB(255, 112, 184, 194),
+                // Color.fromARGB(255, 106, 197, 152),
+                // Color.fromARGB(255, 130, 192, 142),
+                // Color.fromARGB(255, 153, 188, 133)
+                clr1, clr2, clr3, clr4, clr5
               ],
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,

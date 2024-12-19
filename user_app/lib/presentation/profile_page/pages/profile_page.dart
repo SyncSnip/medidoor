@@ -5,7 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:user_app/common/ui_functions/ui_functions.dart';
 import 'package:user_app/common/widgets/loading.dart';
 import 'package:user_app/config/extensions/extensions.dart';
-import 'package:user_app/presentation/auth/pages/sign_in_page.dart';
+import 'package:user_app/presentation/cart/pages/map_tracking_page.dart';
 import 'package:user_app/presentation/splashscreen/pages/splashscreen.dart';
 
 import '../bloc/profile_bloc.dart';
@@ -259,6 +259,10 @@ class _ProfilePageState extends State<ProfilePage> {
               context,
               MaterialPageRoute(builder: (context) => const PastOrdersPage()),
             );
+          }),
+          _buildListTile(Icons.local_shipping, 'Track Your Order', () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (_) => const MapTrackingPage()));
           }),
         ],
       ),

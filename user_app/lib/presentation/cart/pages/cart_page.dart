@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:user_app/presentation/cart/pages/document_page.dart';
 
 import '../../../config/assets/app_images.dart';
-import '../../checkout_page/pages/checkout_page.dart'; // Importing images from homepage
 
 class CartPage extends StatelessWidget {
   const CartPage({super.key});
@@ -96,8 +96,8 @@ class CartPage extends StatelessWidget {
               height: 50,
               child: ElevatedButton(
                 onPressed: () {
-                  proceedToCheckout(
-                      context); // Pass context to checkout function
+                  proceedToDocumentPage(
+                      context); // Pass context to document page function
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green,
@@ -108,7 +108,7 @@ class CartPage extends StatelessWidget {
                   ),
                 ),
                 child: Text(
-                  'Proceed to Checkout',
+                  'Proceed to Document Page',
                   style: GoogleFonts.sourceSans3(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
@@ -152,13 +152,13 @@ class CartPage extends StatelessWidget {
     // Implement item removal logic
   }
 
-  void proceedToCheckout(BuildContext context) {
+  void proceedToDocumentPage(BuildContext context) {
     // Add context parameter
-    // Implement checkout logic
+    // Implement document page logic
     Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) => const CheckoutPage()), // Add const
+          builder: (context) => const DocumentPage()), // Add const
     );
   }
 }

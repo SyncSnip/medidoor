@@ -18,7 +18,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
   // Map to store quantities for each product
   Map<String, int> quantities = {};
   double amount = 283.0; // Set initial amount
-
+  bool presrequired = true;
   @override
   void initState() {
     super.initState();
@@ -75,6 +75,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       builder: (context) => Container(
+        width: MediaQuery.of(context).size.width,
         padding: const EdgeInsets.all(20),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -98,26 +99,13 @@ class _CheckoutPageState extends State<CheckoutPage> {
               style: TextStyle(color: Colors.grey.shade600),
             ),
             const SizedBox(height: 24),
-            ElevatedButton(
-              onPressed: () {
-                // Navigate to order tracking page
-                Navigator.pop(context);
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green,
-                minimumSize: const Size(double.infinity, 50),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-              child: const Text(
-                'Track Order',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontFamily: 'GoogleFonts.sourceSans3',
-                ),
-              ),
-            ),
+            Text(
+              "Track your Order on Track Page",
+              style: TextStyle(
+                  color: Colors.green[900],
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600),
+            )
           ],
         ),
       ),
@@ -292,28 +280,29 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   spacing: 16,
                   runSpacing: 16,
                   children: [
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.43,
-                      child: ElevatedButton.icon(
-                        icon: const Icon(Icons.upload_file),
-                        label: const Text('Upload'),
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.green.shade100,
-                          foregroundColor: Colors.green.shade800,
-                        ),
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: Colors.green.shade50,
+                        borderRadius: BorderRadius.circular(8),
                       ),
-                    ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.43,
-                      child: ElevatedButton.icon(
-                        icon: const Icon(Icons.medical_services),
-                        label: const Text('Consult'),
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.green.shade100,
-                          foregroundColor: Colors.green.shade800,
-                        ),
+                      child: const Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.check_circle,
+                            color: Colors.green,
+                            size: 24,
+                          ),
+                          SizedBox(width: 8),
+                          Text(
+                            'Prescription added',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],
@@ -594,11 +583,18 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   children: [
                     Text('Size: $size'),
                     if (isPrescriptionRequired)
-                      Text(
-                        '*Prescription required',
-                        style: TextStyle(
-                          color: Colors.grey.shade600,
-                          fontSize: 12,
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 6),
+                        decoration: BoxDecoration(
+                          color: Colors.green.shade50,
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: Text(
+                          '*Prescription required',
+                          style: TextStyle(
+                            color: Colors.green[700],
+                            fontSize: 12,
+                          ),
                         ),
                       ),
                   ],

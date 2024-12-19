@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:user_app/common/widgets/loading.dart';
 import 'package:user_app/config/extensions/extensions.dart';
 import 'package:user_app/presentation/auth/bloc/auth_bloc.dart';
@@ -21,6 +21,8 @@ class _SignInPageState extends State<SignInPage> {
   final AuthBloc _authBloc = AuthBloc();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passController = TextEditingController();
+  final TextEditingController _mobileController = TextEditingController();
+  bool _isPasswordVisible = true;
   bool _checkBox = false;
 
   @override
@@ -112,6 +114,8 @@ class _SignInPageState extends State<SignInPage> {
                                 child: TextFormField(
                                   controller: _emailController,
                                   decoration: InputDecoration(
+                                    contentPadding:
+                                        const EdgeInsets.only(left: 10),
                                     filled: true,
                                     fillColor: Colors.white,
                                     focusColor: Colors.transparent,
@@ -120,6 +124,47 @@ class _SignInPageState extends State<SignInPage> {
                                     ),
                                   ),
                                   keyboardType: TextInputType.emailAddress,
+                                ),
+                              ),
+                            ),
+                            20.ah,
+                            const Text(
+                              "Enter Mobile No.*",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                color: Colors.black87,
+                              ),
+                            ),
+                            10.ah,
+                            SizedBox(
+                              height: 40,
+                              child: Center(
+                                child: TextFormField(
+                                  controller: _mobileController,
+                                  // validator: (value) {
+                                  //   if (value == null || value.isEmpty) {
+                                  //     return 'Please enter mobile number';
+                                  //   } else if (value.length != 10) {
+                                  //     return 'Mobile number must be 10 digits';
+                                  //   }
+                                  //   return null;
+                                  // },
+                                  decoration: InputDecoration(
+                                    contentPadding:
+                                        const EdgeInsets.only(left: 10),
+                                    filled: true,
+                                    fillColor: Colors.white,
+                                    focusColor: Colors.transparent,
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                  ),
+                                  keyboardType: TextInputType.number,
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.digitsOnly,
+                                    LengthLimitingTextInputFormatter(10),
+                                  ],
                                 ),
                               ),
                             ),
@@ -137,9 +182,22 @@ class _SignInPageState extends State<SignInPage> {
                               height: 40,
                               child: Center(
                                 child: TextFormField(
-                                  obscureText: true,
+                                  obscureText: _isPasswordVisible,
                                   controller: _passController,
                                   decoration: InputDecoration(
+                                    contentPadding:
+                                        const EdgeInsets.only(left: 10),
+                                    suffixIcon: InkWell(
+                                      onTap: () {
+                                        setState(() {
+                                          _isPasswordVisible =
+                                              !_isPasswordVisible;
+                                        });
+                                      },
+                                      child: Icon(_isPasswordVisible
+                                          ? Icons.visibility
+                                          : Icons.visibility_off),
+                                    ),
                                     filled: true,
                                     fillColor: Colors.white,
                                     border: OutlineInputBorder(
@@ -240,67 +298,6 @@ class _SignInPageState extends State<SignInPage> {
                                 ),
                               ),
                             ),
-                            20.ah,
-                            // const Center(
-                            //   child: Text(
-                            //     "Or",
-                            //     style: TextStyle(
-                            //       fontSize: 12,
-                            //       fontWeight: FontWeight.w700,
-                            //       color: Colors.black87,
-                            //     ),
-                            //   ),
-                            // ),
-                            // 20.ah,
-                            // Center(
-                            //   child: GestureDetector(
-                            //     onTap: () {
-                            //       // Handle Google login
-                            //     },
-                            //     child: Container(
-                            //       padding: const EdgeInsets.symmetric(
-                            //         horizontal: 50,
-                            //         vertical: 8,
-                            //       ),
-                            //       decoration: BoxDecoration(
-                            //         color: Colors.white,
-                            //         borderRadius: BorderRadius.circular(30),
-                            //         border: Border.all(
-                            //           color: const Color.fromARGB(
-                            //               255, 196, 195, 195),
-                            //           width: 2,
-                            //         ),
-                            //         boxShadow: [
-                            //           BoxShadow(
-                            //             color: Colors.grey.withOpacity(0.1),
-                            //             spreadRadius: 1,
-                            //             blurRadius: 4,
-                            //             offset: const Offset(0, 2),
-                            //           ),
-                            //         ],
-                            //       ),
-                            //       child: Row(
-                            //         mainAxisSize: MainAxisSize.min,
-                            //         children: [
-                            //           SvgPicture.asset(
-                            //             'assets/icons/google.svg',
-                            //             height: 24,
-                            //             width: 24,
-                            //           ),
-                            //           const SizedBox(width: 12),
-                            //           const Text(
-                            //             'with Google',
-                            //             style: TextStyle(
-                            //               color: Colors.black87,
-                            //               fontSize: 16,
-                            //               fontWeight: FontWeight.w700,
-                            //             ),
-                            //           ),
-                            //         ],
-                            //       ),
-                            //     ),
-                            //   ),
-                            // ),
                           ],
                         ),
                       ),
