@@ -1,7 +1,8 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
-import 'package:user_app/data/sources/auth_source.dart';
+import 'package:user_app/presentation/cart/pages/document_page.dart';
 
 class CheckoutPage extends StatefulWidget {
   const CheckoutPage({super.key});
@@ -241,7 +242,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
           onPressed: () => Navigator.pop(context),
         ),
         title: const Text(
-          'My Cart',
+          'Checkout Page',
           style: TextStyle(color: Colors.black),
         ),
         backgroundColor: Colors.white,
@@ -263,49 +264,38 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   '4% off',
                   "https://5.imimg.com/data5/FX/JG/NN/GLADMIN-41894397/selection-013-1000x1000.png",
                 ),
-                const Divider(),
+                Container(
+                  margin: const EdgeInsets.symmetric(vertical: 16),
+                  height: 2,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                      colors: [
+                        Colors.green.withOpacity(0.1),
+                        Colors.green.shade500,
+                        Colors.green.withOpacity(0.1),
+                      ],
+                      stops: const [0.0, 0.5, 1.0],
+                    ),
+                    borderRadius: BorderRadius.circular(2),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.green.withOpacity(0.2),
+                        blurRadius: 4,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                ),
                 _buildCartItem(
                   'Glycomet Gp 2 Tablet 15',
                   '2 MG',
                   146,
                   178,
                   '18% off',
-                  "https://5.imimg.com/data5/FX/JG/NN/GLADMIN-41894397/selection-013-1000x1000.png",
+                  "https://www.netmeds.com/images/product-v1/600x600/360740/glycomet_gp_2mg_tablet_15s_579455_1_0.jpg",
                   isPrescriptionRequired: true,
-                ),
-
-                // Prescription Actions
-                const SizedBox(height: 16),
-                Wrap(
-                  spacing: 16,
-                  runSpacing: 16,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: Colors.green.shade50,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: const Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            Icons.check_circle,
-                            color: Colors.green,
-                            size: 24,
-                          ),
-                          SizedBox(width: 8),
-                          Text(
-                            'Prescription added',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
                 ),
 
                 // Similar Products
@@ -346,26 +336,85 @@ class _CheckoutPageState extends State<CheckoutPage> {
 
                 // Delivery Offer
                 const SizedBox(height: 24),
-                Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: Colors.green.shade50,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        'Get Free delivery',
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                TweenAnimationBuilder(
+                  tween: Tween<double>(begin: 0, end: 1),
+                  duration: const Duration(
+                      milliseconds: 2000), // Changed to 2 seconds
+                  builder: (context, value, child) {
+                    return Transform.translate(
+                      offset: Offset(
+                          0,
+                          8 *
+                              sin(value *
+                                  6 *
+                                  pi)), // Increased amplitude and frequency
+                      child: Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: Colors.green.shade50,
+                          borderRadius: BorderRadius.circular(12),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.green.withOpacity(0.2),
+                              blurRadius: 8,
+                              offset: const Offset(0, 4),
+                            )
+                          ],
+                          border: Border.all(
+                            color: Colors.green.shade200,
+                            width: 1.5,
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.local_offer_rounded,
+                                  color: Colors.green.shade700,
+                                ),
+                                const SizedBox(width: 8),
+                                const Text(
+                                  'Get Free delivery',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 8,
+                                    vertical: 4,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: Colors.green.shade100,
+                                    borderRadius: BorderRadius.circular(6),
+                                  ),
+                                  child: Text(
+                                    'FREE50',
+                                    style: TextStyle(
+                                      color: Colors.green.shade700,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                Icon(
+                                  Icons.chevron_right,
+                                  color: Colors.green.shade700,
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
-                      Text(
-                        'Use FREE50',
-                        style: TextStyle(color: Colors.grey.shade600),
-                      ),
-                      const Icon(Icons.chevron_right),
-                    ],
-                  ),
+                    );
+                  },
                 ),
 
                 // Bill Details
@@ -491,20 +540,12 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   ],
                 ),
                 ElevatedButton(
-                  onPressed: () async {
-                    final String razorpayKey = dotenv.env['razorpay_key'] ?? "";
-
-                    final options = {
-                      'key': razorpayKey,
-                      'amount': (amount * 100).toInt(), // Convert to paise
-                      'name': 'Medidoor',
-                      'description': 'Paying',
-                      'prefill': {
-                        'contact': AuthSource().getPhone ?? '8888888888',
-                        'email': AuthSource().getEmail ?? 'a@b.c'
-                      },
-                    };
-                    _razorpay.open(options);
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                DocumentPage(amount: amount)));
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF1BAC4B),
@@ -544,6 +585,20 @@ class _CheckoutPageState extends State<CheckoutPage> {
   }) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 12),
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.grey.shade200),
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 1,
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
+        color: Colors.white,
+      ),
+      margin: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -551,14 +606,15 @@ class _CheckoutPageState extends State<CheckoutPage> {
           Container(
             height: 80,
             width: 80,
+            margin: const EdgeInsets.symmetric(horizontal: 12),
             decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
               image: DecorationImage(
                 image: Image.network(image).image,
                 fit: BoxFit.cover,
               ),
             ),
           ),
-          const SizedBox(width: 12),
 
           // Product details
           Expanded(
@@ -644,32 +700,46 @@ class _CheckoutPageState extends State<CheckoutPage> {
           ),
 
           // Quantity controls
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              IconButton(
-                icon: const Icon(Icons.remove),
-                onPressed: () => _decrementQuantity(name),
-                style: IconButton.styleFrom(
-                  backgroundColor: Colors.green.shade50,
-                  padding: const EdgeInsets.all(8),
+          Container(
+            margin: const EdgeInsets.only(right: 12),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                IconButton(
+                  icon: const Icon(
+                    Icons.remove,
+                    color: Colors.white,
+                    size: 16,
+                  ),
+                  onPressed: () => _decrementQuantity(name),
+                  style: IconButton.styleFrom(
+                    backgroundColor: Colors.red.shade400,
+                    minimumSize: const Size(24, 24), // Reduced background size
+                    padding: EdgeInsets.zero, // Removed padding
+                  ),
                 ),
-                iconSize: 20,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4),
-                child: Text('${quantities[name] ?? 1}'),
-              ),
-              IconButton(
-                icon: const Icon(Icons.add),
-                onPressed: () => _incrementQuantity(name),
-                style: IconButton.styleFrom(
-                  backgroundColor: Colors.green.shade50,
-                  padding: const EdgeInsets.all(8),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: Text(
+                    '${quantities[name] ?? 1}',
+                    style: const TextStyle(fontWeight: FontWeight.w500),
+                  ),
                 ),
-                iconSize: 20,
-              ),
-            ],
+                IconButton(
+                  icon: const Icon(
+                    Icons.add,
+                    color: Colors.white,
+                    size: 16,
+                  ),
+                  onPressed: () => _incrementQuantity(name),
+                  style: IconButton.styleFrom(
+                    backgroundColor: Colors.green.shade400,
+                    minimumSize: const Size(24, 24),
+                    padding: EdgeInsets.zero,
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),

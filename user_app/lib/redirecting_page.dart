@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:user_app/data/model/navigation_bar_model.dart';
 import 'package:user_app/presentation/cart/pages/cart_page.dart';
 import 'package:user_app/presentation/categories_page/pages/categories_page.dart';
@@ -41,42 +42,63 @@ class _RedirectingPageState extends State<RedirectingPage> {
   ];
 
   int _selectedIndex = 0;
+  DateTime? currentBackPressTime;
 
   @override
   void initState() {
     super.initState();
   }
 
+  Future<bool> onWillPop() async {
+    DateTime now = DateTime.now();
+    if (currentBackPressTime == null ||
+        now.difference(currentBackPressTime!) > const Duration(seconds: 2)) {
+      currentBackPressTime = now;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Press back again to exit'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return false;
+    }
+    SystemNavigator.pop();
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: _navigationItems[_selectedIndex].page,
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Container(
-          height: 55,
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey[300]!, width: 1.2),
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(45),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.2),
-                blurRadius: 10,
-                offset: const Offset(0, 5),
+    return WillPopScope(
+      onWillPop: onWillPop,
+      child: Scaffold(
+        body: _navigationItems[_selectedIndex].page,
+        bottomNavigationBar: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Container(
+            height: 55,
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.grey[300]!, width: 1.2),
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(45),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.2),
+                  blurRadius: 10,
+                  offset: const Offset(0, 5),
+                ),
+              ],
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: List.generate(
+                _navigationItems.length,
+                (index) => _buildNavigationItem(index),
               ),
-            ],
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: List.generate(
-              _navigationItems.length,
-              (index) => _buildNavigationItem(index),
             ),
           ),
         ),
+        extendBody: true,
       ),
-      extendBody: true,
     );
   }
 

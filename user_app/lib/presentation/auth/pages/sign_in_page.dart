@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:user_app/common/widgets/loading.dart';
 import 'package:user_app/config/extensions/extensions.dart';
 import 'package:user_app/presentation/auth/bloc/auth_bloc.dart';
-import 'package:user_app/presentation/auth/pages/sign_up_page.dart';
 import 'package:user_app/redirecting_page.dart';
 
 import 'forgetmail_page.dart';
@@ -281,11 +280,12 @@ class _SignInPageState extends State<SignInPage> {
                             Center(
                               child: GestureDetector(
                                 onTap: () {
-                                  Navigator.push(
+                                  _authBloc.add(AuthSignInNormalEvent());
+                                  Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            const SignupPage()),
+                                            const RedirectingPage()),
                                   );
                                 },
                                 child: Text(

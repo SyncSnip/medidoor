@@ -618,33 +618,56 @@ class _ProductDetailsPageState extends State<ProductDetailsPage>
               children: [
                 Expanded(
                   child: Container(
-                    decoration: const BoxDecoration(
+                    decoration: BoxDecoration(
                       image: DecorationImage(
-                        image: NetworkImage(
-                            'https://via.placeholder.com/150'), // Example image
-                        fit: BoxFit.cover,
+                        image: AssetImage(index == 0
+                            ? 'assets/images/diabetes.png'
+                            : index == 1
+                                ? 'assets/images/vicks-vaporub.png'
+                                : index == 2
+                                    ? 'assets/images/medicine.png'
+                                    : index == 3
+                                        ? 'assets/images/pain-injury.png'
+                                        : 'assets/images/stomach-health.png'),
+                        fit: BoxFit.contain,
                       ),
                       borderRadius:
-                          BorderRadius.vertical(top: Radius.circular(8)),
+                          const BorderRadius.vertical(top: Radius.circular(8)),
                     ),
                   ),
                 ),
-                const Padding(
-                  padding: EdgeInsets.all(8.0),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Product Name',
-                        style: TextStyle(
+                        index == 0
+                            ? 'Sugar Free Butter'
+                            : index == 1
+                                ? 'Vicks Vaporub'
+                                : index == 2
+                                    ? 'Dolo 600 mg'
+                                    : index == 3
+                                        ? 'Moov'
+                                        : 'Dabur Pancharisht',
+                        style: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      SizedBox(height: 4),
+                      const SizedBox(height: 4),
                       Text(
-                        '₹105',
-                        style: TextStyle(
+                        index == 0
+                            ? '₹85'
+                            : index == 1
+                                ? '₹45'
+                                : index == 2
+                                    ? '₹65'
+                                    : index == 3
+                                        ? '₹55'
+                                        : '₹125',
+                        style: const TextStyle(
                           fontSize: 14,
                           color: Colors.green,
                         ),

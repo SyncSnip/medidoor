@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:user_app/common/widgets/loading.dart';
 import 'package:user_app/config/extensions/extensions.dart';
 import 'package:user_app/presentation/auth/bloc/auth_bloc.dart';
 import 'package:user_app/presentation/auth/pages/otp_screen_sign_up.dart';
 import 'package:user_app/presentation/auth/pages/sign_in_page.dart';
-import 'package:user_app/redirecting_page.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});

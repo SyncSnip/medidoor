@@ -7,6 +7,7 @@ import 'package:user_app/common/pages/something_went_wrong.dart';
 import 'package:user_app/common/widgets/loading.dart';
 import 'package:user_app/config/extensions/extensions.dart';
 import 'package:user_app/data/model/product_model.dart';
+import 'package:user_app/presentation/cart/pages/map_tracking_page.dart';
 import 'package:user_app/presentation/homepage/bloc/home_bloc.dart';
 
 import '../../../config/assets/app_images.dart';
@@ -28,6 +29,7 @@ class _HomepageState extends State<Homepage> {
     AppImages.banner1,
   ];
   int value = 1;
+  bool showtrackorder = false;
   @override
   void initState() {
     super.initState();
@@ -61,14 +63,21 @@ class _HomepageState extends State<Homepage> {
                               height: 50,
                               child: Row(
                                 children: [
-                                  CircleAvatar(
-                                    backgroundColor:
-                                        const Color.fromARGB(255, 82, 142, 47),
-                                    radius: 16,
-                                    child: Image.asset(
-                                      'assets/icons/location.png',
-                                      color: Colors.white,
-                                      width: 20,
+                                  GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        showtrackorder = !showtrackorder;
+                                      });
+                                    },
+                                    child: CircleAvatar(
+                                      backgroundColor: const Color.fromARGB(
+                                          255, 82, 142, 47),
+                                      radius: 16,
+                                      child: Image.asset(
+                                        'assets/icons/location.png',
+                                        color: Colors.white,
+                                        width: 20,
+                                      ),
                                     ),
                                   ),
                                   10.aw,
@@ -137,13 +146,106 @@ class _HomepageState extends State<Homepage> {
                         ),
                       ),
                       const SizedBox(height: 16),
+                      showtrackorder
+                          ? Container(
+                              padding: const EdgeInsets.all(12),
+                              decoration: BoxDecoration(
+                                color: const Color.fromARGB(255, 215, 243, 208),
+                                borderRadius: BorderRadius.circular(12),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.6),
+                                    spreadRadius: 0,
+                                    blurRadius: 0,
+                                    offset: const Offset(0, 2),
+                                  ),
+                                ],
+                              ),
+                              child: Row(
+                                children: [
+                                  Image.asset(
+                                    'assets/images/map.png',
+                                    height: 80,
+                                    width: 80,
+                                    frameBuilder: (context, child, frame,
+                                        wasSynchronouslyLoaded) {
+                                      return Container(
+                                        width: 73,
+                                        height: 73,
+                                        decoration: BoxDecoration(
+                                          color: Colors.green.shade300,
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                        ),
+                                        child: child,
+                                      );
+                                    },
+                                  ),
+                                  const SizedBox(width: 20),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Arriving in 8 minutes',
+                                          style: GoogleFonts.sourceSans3(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 22,
+                                          ),
+                                        ),
+                                        Text(
+                                          'Sudeep is your delivery partner',
+                                          style: GoogleFonts.sourceSans3(
+                                            fontSize: 14,
+                                            color: Colors.grey,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 8),
+                                        GestureDetector(
+                                          onTap: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (_) =>
+                                                        const MapTrackingPage()));
+                                          },
+                                          child: Container(
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 10,
+                                              vertical: 5,
+                                            ),
+                                            decoration: BoxDecoration(
+                                              color: Colors.green,
+                                              borderRadius:
+                                                  BorderRadius.circular(20),
+                                            ),
+                                            child: Text(
+                                              'Track Your Order here',
+                                              style: GoogleFonts.sourceSans3(
+                                                color: Colors.white,
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )
+                          : const SizedBox(
+                              height: 0,
+                            ),
+                      20.ah,
                       SizedBox(
                         width: double.infinity,
                         child: CarouselSlider.builder(
                             options: CarouselOptions(
                                 autoPlayAnimationDuration:
                                     const Duration(milliseconds: 800),
-                                padEnds: true,
                                 autoPlay: true,
                                 height:
                                     MediaQuery.of(context).size.height * 0.2,
@@ -580,17 +682,17 @@ class _HomepageState extends State<Homepage> {
       onTap: () => context.push(ProductDetailsPage(productModel: productModel)),
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 10),
-        width: 165, // Adjust width as needed
+        width: 165,
         decoration: BoxDecoration(
-          color: const Color.fromARGB(255, 255, 255, 255),
+          color: Colors.white,
           border: Border.all(color: Colors.grey[300]!),
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
-              color: const Color.fromARGB(255, 121, 114, 114).withOpacity(0.2),
-              spreadRadius: 1,
-              blurRadius: 8,
-              offset: const Offset(-2, -3),
+              color: Colors.grey.withOpacity(0.1),
+              spreadRadius: 0,
+              blurRadius: 4,
+              offset: const Offset(0, 2),
             ),
           ],
         ),
@@ -598,24 +700,22 @@ class _HomepageState extends State<Homepage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              height: 100, // Adjust height as needed
+              height: 100,
               decoration: BoxDecoration(
                   color: Colors.white,
                   boxShadow: const [
                     BoxShadow(
-                        offset: Offset(0, 2),
+                        blurRadius: 2,
+                        offset: Offset(0, 1),
                         color: Color.fromARGB(255, 207, 202, 202))
                   ],
-                  // color: Colors.amberAccent,
                   borderRadius: BorderRadius.circular(10)),
-
               child: Center(
                 child: Container(
                   height: 100,
                   width: 100,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
-                    // color: Colors.amberAccent,
                   ),
                   child: Image.asset(
                     'assets/images/vicks-vaporub.png',
@@ -712,7 +812,10 @@ class _HomepageState extends State<Homepage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          context.push(
+                              ProductDetailsPage(productModel: productModel));
+                        },
                         child: Container(
                           padding: const EdgeInsets.symmetric(
                               vertical: 8, horizontal: 16),

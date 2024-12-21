@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:user_app/redirecting_page.dart';
 
 class MapTrackingPage extends StatelessWidget {
   const MapTrackingPage({super.key});
@@ -8,6 +9,12 @@ class MapTrackingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+            onPressed: () {
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (_) => const RedirectingPage()));
+            },
+            icon: const Icon(Icons.arrow_back_ios_new)),
         iconTheme: const IconThemeData(color: Colors.white),
         title: Text(
           'Track Your Order',

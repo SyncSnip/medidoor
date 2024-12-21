@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:user_app/presentation/cart/pages/document_page.dart';
+import 'package:user_app/presentation/checkout_page/pages/checkout_page.dart';
 
 import '../../../config/assets/app_images.dart';
 
@@ -16,6 +16,12 @@ class CartPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+        // automaticallyImplyLeading: false,
+        leading: const Icon(
+          Icons.shopping_cart_checkout,
+          color: Colors.white,
+        ),
+
         title: Text(
           'Your Cart',
           style: GoogleFonts.sourceSans3(
@@ -96,8 +102,8 @@ class CartPage extends StatelessWidget {
               height: 50,
               child: ElevatedButton(
                 onPressed: () {
-                  proceedToDocumentPage(
-                      context); // Pass context to document page function
+                  proceedToCheckout(context,
+                      totalAmount); // Pass context and total amount to checkout page
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green,
@@ -108,7 +114,7 @@ class CartPage extends StatelessWidget {
                   ),
                 ),
                 child: Text(
-                  'Proceed to Document Page',
+                  'Proceed to Checkout',
                   style: GoogleFonts.sourceSans3(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
@@ -152,13 +158,10 @@ class CartPage extends StatelessWidget {
     // Implement item removal logic
   }
 
-  void proceedToDocumentPage(BuildContext context) {
-    // Add context parameter
-    // Implement document page logic
+  void proceedToCheckout(BuildContext context, double amount) {
     Navigator.push(
       context,
-      MaterialPageRoute(
-          builder: (context) => const DocumentPage()), // Add const
+      MaterialPageRoute(builder: (context) => const CheckoutPage()),
     );
   }
 }
